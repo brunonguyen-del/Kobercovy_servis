@@ -3,20 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kobercový servis, s. r. o. — automatizovaná linka</title>
-  <meta name="description" content="Čištění kusových koberců na automatizované lince. Kalkulačka ceny, sběrná místa, kontakt." />
+  <title>Kobercový servis — automatizovaná linka</title>
+  <meta name="description" content="Čištění kusových koberců na automatizované lince. Ceník, kalkulačka, sběrná místa, kontakt." />
 
   <style>
     :root{
-      /* LIGHT THEME */
       --bg:#ffffff;
-      --panel:#ffffff;
-      --panel2:#f6f8fc;
       --text:#0b0f19;
       --muted:#5c667a;
       --line:rgba(11,15,25,.12);
-      --accent:#2563eb; /* jemná modrá */
-      --accent2:#60a5fa;
+      --accent:#2563eb;
 
       --max:1120px;
       --radius:18px;
@@ -36,6 +32,17 @@
     }
     a{color:inherit; text-decoration:none}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
+    section{padding:80px 0}
+    .sectionTitle{margin:0 0 10px; font-size:30px; letter-spacing:-.3px}
+    .muted{color:var(--muted); line-height:1.55}
+    .mini{font-size:13px; color:var(--muted)}
+    .divider{height:1px; background:var(--line); margin:14px 0}
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.88);
+      box-shadow:var(--shadow);
+    }
 
     /* NAV */
     .nav{
@@ -45,7 +52,7 @@
       border-bottom:1px solid var(--line);
     }
     .navin{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0}
-    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.2px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:950; letter-spacing:.2px}
     .dot{
       width:10px; height:10px; border-radius:50%;
       background:var(--accent);
@@ -62,50 +69,28 @@
     .cta{
       padding:10px 12px; border-radius:12px; border:0;
       background:linear-gradient(135deg, rgba(37,99,235,.98), rgba(96,165,250,.92));
-      color:white; font-weight:900; cursor:pointer;
+      color:white; font-weight:950; cursor:pointer;
       box-shadow:0 10px 28px rgba(37,99,235,.20);
     }
     .cta:hover{filter:brightness(1.03)}
 
-    /* SECTIONS */
-    section{padding:72px 0}
-    .sectionTitle{margin:0 0 10px; font-size:28px; letter-spacing:-.3px}
-    .muted{color:var(--muted); line-height:1.55}
-    .card{
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:rgba(255,255,255,.85);
-      box-shadow:var(--shadow);
-    }
-    .divider{height:1px; background:var(--line); margin:14px 0}
-    .mini{font-size:13px; color:var(--muted)}
-    .big{font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px}
-
-    /* HERO VIDEO (světlý web, overlay pro čitelnost) */
+    /* HERO (bez videa jede jen poster background) */
     .hero{
-      position:relative;
       min-height:100vh;
       display:flex;
       align-items:center;
-      padding-top:72px; /* fixed nav */
+      padding-top:76px; /* fixed nav */
+      position:relative;
       overflow:hidden;
-    }
-    .heroMedia{position:absolute; inset:0; z-index:0; background:#000;}
-    .heroMedia video{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      object-fit:cover;
-      transform:scale(1.02);
-      filter:saturate(1.05) contrast(1.02);
+      background: url("./assets/poster.jpg") center/cover no-repeat;
     }
     .heroOverlay{
       position:absolute; inset:0;
-      z-index:1;
       background:
         radial-gradient(900px 600px at 15% 20%, rgba(37,99,235,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.90) 55%, rgba(255,255,255,1));
+        linear-gradient(180deg, rgba(255,255,255,.70), rgba(255,255,255,.92) 55%, rgba(255,255,255,1));
     }
-    .heroContent{position:relative; z-index:2; padding:28px 0 40px;}
+    .heroContent{position:relative; z-index:2}
     .heroGrid{
       display:grid;
       grid-template-columns: 1.15fr .85fr;
@@ -114,12 +99,11 @@
     }
     h1{
       margin:0 0 12px;
-      font-size:46px;
-      line-height:1.04;
-      letter-spacing:-.8px;
-      color:var(--text);
+      font-size:50px;
+      line-height:1.02;
+      letter-spacing:-1px;
     }
-    .lead{color:var(--muted); font-size:16px; max-width:62ch}
+    .lead{color:var(--muted); font-size:16px; max-width:65ch}
 
     .heroBtns{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
     .btn{
@@ -127,9 +111,9 @@
       padding:12px 14px;
       border-radius:14px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.75);
+      background:rgba(255,255,255,.78);
       color:var(--text);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
     }
     .btn:hover{background:rgba(15,23,42,.04)}
@@ -139,7 +123,6 @@
       color:white;
       box-shadow:0 10px 28px rgba(37,99,235,.20);
     }
-
     .pillRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
     .pill{
       border:1px solid var(--line);
@@ -147,7 +130,7 @@
       padding:8px 10px;
       font-size:13px;
       color:var(--muted);
-      background:rgba(255,255,255,.75);
+      background:rgba(255,255,255,.78);
     }
     .pill strong{color:var(--text)}
 
@@ -155,9 +138,32 @@
       padding:16px;
       border:1px solid var(--line);
       border-radius:var(--radius);
-      background:rgba(255,255,255,.78);
+      background:rgba(255,255,255,.82);
       backdrop-filter: blur(10px);
     }
+
+    /* PHOTO BACKGROUND SECTIONS */
+    .photoSection{
+      position:relative;
+      overflow:hidden;
+    }
+    .photoSection::before{
+      content:"";
+      position:absolute; inset:0;
+      background-image: var(--bgimg);
+      background-size:cover;
+      background-position:center;
+      filter: saturate(.35) brightness(1.25) contrast(.9) blur(2px);
+      transform: scale(1.05);
+      z-index:0;
+    }
+    .photoSection::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(rgba(255,255,255,.86), rgba(255,255,255,.96));
+      z-index:1;
+    }
+    .photoSection > .wrap{position:relative; z-index:2}
 
     /* GRID */
     .grid3{display:grid; grid-template-columns: repeat(3,1fr); gap:14px}
@@ -165,7 +171,7 @@
     .box h3{margin:0 0 8px; font-size:16px}
     .box p{margin:0; color:var(--muted); font-size:14px}
 
-    /* LIST steps */
+    /* Steps */
     .steps{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -176,21 +182,21 @@
       padding:16px;
       border:1px solid var(--line);
       border-radius:16px;
-      background:rgba(255,255,255,.85);
+      background:rgba(255,255,255,.90);
     }
     .step .n{
       width:28px; height:28px; border-radius:10px;
       display:inline-flex; align-items:center; justify-content:center;
       border:1px solid var(--line);
       color:var(--muted);
-      font-weight:900;
+      font-weight:950;
       margin-bottom:10px;
       background:rgba(15,23,42,.03);
     }
-    .step .t{font-weight:900; margin:0 0 6px}
+    .step .t{font-weight:950; margin:0 0 6px}
     .step .d{margin:0; color:var(--muted); font-size:14px}
 
-    /* Form fields (generic) */
+    /* Inputs */
     label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
     input, select{
       width:100%;
@@ -206,11 +212,11 @@
       box-shadow:0 0 0 4px rgba(37,99,235,.12);
     }
 
-    /* Kalkulačka – řádky koberců */
+    /* Calculator rows */
     .rugRow{
       border:1px solid var(--line);
       border-radius:16px;
-      background:rgba(255,255,255,.90);
+      background:rgba(255,255,255,.92);
       padding:14px;
       display:grid;
       gap:12px;
@@ -223,10 +229,7 @@
       align-items:center;
       flex-wrap:wrap;
     }
-    .rugTitle{
-      font-weight:950;
-      letter-spacing:-.2px;
-    }
+    .rugTitle{font-weight:950; letter-spacing:-.2px}
     .rugGrid{
       display:grid;
       grid-template-columns: 1.1fr 1fr 1fr;
@@ -243,13 +246,13 @@
       grid-template-columns: 1fr 1fr 1fr;
       gap:12px;
     }
-    .rugOut .boxy{
+    .boxy{
       border:1px solid var(--line);
       border-radius:14px;
       padding:12px;
       background:rgba(15,23,42,.03);
     }
-    .rugOut .val{
+    .val{
       font-weight:950;
       font-size:18px;
       letter-spacing:-.2px;
@@ -259,13 +262,13 @@
       padding:10px 12px;
       border-radius:12px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.75);
-      font-weight:900;
+      background:rgba(255,255,255,.78);
+      font-weight:950;
       cursor:pointer;
     }
     .smallBtn:hover{background:rgba(15,23,42,.04)}
 
-    /* MAP */
+    /* Map */
     .mapGrid{display:grid; grid-template-columns: 1fr .95fr; gap:14px; padding:16px;}
     .row{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
     #map{
@@ -279,7 +282,7 @@
       border:1px solid var(--line);
       border-radius:16px;
       overflow:hidden;
-      background:rgba(255,255,255,.85);
+      background:rgba(255,255,255,.90);
       display:flex;
       flex-direction:column;
       min-height:430px;
@@ -288,7 +291,7 @@
     .cards{padding:10px; display:grid; gap:10px; overflow:auto}
     .placeCard{
       border:1px solid var(--line);
-      background:rgba(255,255,255,.92);
+      background:rgba(255,255,255,.96);
       border-radius:14px;
       padding:12px;
       cursor:pointer;
@@ -298,7 +301,7 @@
       border-color:rgba(37,99,235,.85);
       box-shadow:0 0 0 4px rgba(37,99,235,.12);
     }
-    .placeCard .t{font-weight:900}
+    .placeCard .t{font-weight:950}
     .placeCard .a{color:var(--muted); font-size:13px; margin-top:4px}
     .placeCard .d{color:rgba(37,99,235,.92); font-size:13px; margin-top:8px}
 
@@ -310,7 +313,7 @@
     }
 
     @media (max-width: 920px){
-      h1{font-size:36px}
+      h1{font-size:38px}
       .heroGrid{grid-template-columns:1fr}
       .grid3{grid-template-columns:1fr}
       .steps{grid-template-columns:1fr}
@@ -321,15 +324,12 @@
       .list{min-height:360px}
       .row{grid-template-columns:1fr}
     }
-    @media (prefers-reduced-motion: reduce){
-      .heroMedia video{display:none}
-      .heroMedia{background:url("assets/poster.jpg") center/cover no-repeat}
-    }
   </style>
 </head>
 
 <body>
 
+  <!-- NAV -->
   <div class="nav">
     <div class="wrap navin">
       <div class="brand">
@@ -349,20 +349,15 @@
 
   <!-- HERO -->
   <section id="uvod" class="hero">
-    <div class="heroMedia" aria-hidden="true">
-      <video autoplay muted loop playsinline preload="metadata" poster="assets/poster.jpg">
-        <source src="assets/linka.mp4" type="video/mp4" />
-      </video>
-    </div>
     <div class="heroOverlay" aria-hidden="true"></div>
 
     <div class="wrap heroContent">
       <div class="heroGrid">
         <div>
-          <h1>Kobercový servis<br/>automatizované čištění koberců</h1>
+          <h1>Automatizované čištění<br/>kusových koberců</h1>
           <p class="lead">
-            Čistíme kusové koberce na automatizované lince. Níže si spočítáš orientační cenu,
-            najdeš nejbližší sběrné místo a kontakt.
+            Čistíme koberce na automatizované lince. Spočítej cenu hned teď, klidně i pro víc koberců,
+            a najdi nejbližší sběrné místo.
           </p>
 
           <div class="heroBtns">
@@ -378,23 +373,24 @@
         </div>
 
         <div class="heroSide">
-          <div style="font-weight:950; margin-bottom:8px;">Služby</div>
+          <div style="font-weight:950; margin-bottom:8px;">Základní čištění zahrnuje</div>
           <div class="muted" style="font-size:14px;">
-            Čištění koberců, impregnace koberců a obšívání koberců.
-            Čištění zahrnuje vyklepání, odstranění znečištění, vyčištění, vysušení, vysátí a zabalení.
+            vyklepání • odstranění znečištění • vyčištění • vysušení • vysátí • zabalení
           </div>
           <div class="divider"></div>
-          <div class="mini">Impregnace a obšívání jsou volitelné a připočítají se v kalkulačce.</div>
+          <div class="mini">
+            Impregnace a obšívání jsou volitelné a připočítají se v kalkulačce.
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- SLUŽBY -->
-  <section id="sluzby">
+  <section id="sluzby" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Služby</h2>
-      <p class="muted">Nabízíme tři služby: čištění koberců, impregnaci koberců a obšívání koberců.</p>
+      <p class="muted">Tři jasné služby. Žádný “marketingový kouzla”, prostě to, co fakt děláte.</p>
 
       <div class="grid3" style="margin-top:14px;">
         <div class="card box">
@@ -403,17 +399,17 @@
         </div>
         <div class="card box">
           <h3>Impregnace koberců</h3>
-          <p>Ochranná impregnace dle typu koberce a použití.</p>
+          <p>Volitelná ochrana vláken proti dalšímu znečištění.</p>
         </div>
         <div class="card box">
           <h3>Obšívání koberců</h3>
-          <p>Úprava / zakončení okrajů (dle domluvy).</p>
+          <p>Volitelné zakončení / oprava okrajů (dle domluvy).</p>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <h3 style="margin:0; font-size:16px; letter-spacing:-.1px;">Základní čištění koberců zahrnuje</h3>
+      <h3 style="margin:0; font-size:16px; letter-spacing:-.1px;">Jak probíhá základní čištění</h3>
       <div class="steps">
         <div class="step">
           <div class="n">1</div>
@@ -422,24 +418,24 @@
         </div>
         <div class="step">
           <div class="n">2</div>
-          <p class="t">Odstranění znečištění + vyčištění</p>
-          <p class="d">Čištění koberce na lince včetně odstranění znečištění.</p>
+          <p class="t">Čištění</p>
+          <p class="d">Odstranění znečištění a vyčištění na automatizované lince.</p>
         </div>
         <div class="step">
           <div class="n">3</div>
-          <p class="t">Vysušení • vysátí • zabalení</p>
-          <p class="d">Po vyčištění koberec vysušíme, vysajeme a zabalíme.</p>
+          <p class="t">Vysušení a zabalení</p>
+          <p class="d">Vysušíme, vysajeme a připravíme k předání / převozu.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CENÍK + KALKULAČKA -->
-  <section id="cenik">
+  <!-- CENÍK -->
+  <section id="cenik" class="photoSection" style="--bgimg:url('./assets/koberec2.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Ceník a kalkulačka</h2>
       <p class="muted">
-        Zadej rozměry v centimetrech. Kalkulačka počítá automaticky. Můžeš přidat více koberců.
+        Zadej rozměry v centimetrech. Kalkulačka počítá automaticky. Můžeš přidat víc koberců.
       </p>
 
       <div class="card" style="margin-top:14px; overflow:hidden;">
@@ -459,13 +455,13 @@
 
           <div class="divider"></div>
 
-          <div class="card" style="box-shadow:none; background:rgba(255,255,255,.75); border-radius:16px;">
+          <div class="card" style="box-shadow:none; background:rgba(255,255,255,.78); border-radius:16px;">
             <div style="padding:16px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
               <div>
                 <div class="mini">Součet plochy</div>
-                <div class="big" id="sumArea">— m²</div>
+                <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumArea">— m²</div>
                 <div class="mini">Součet obvodů</div>
-                <div class="big" id="sumPerim">— m</div>
+                <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumPerim">— m</div>
               </div>
 
               <div>
@@ -475,7 +471,7 @@
                 <div class="divider"></div>
 
                 <div class="mini">Celkem orientačně</div>
-                <div class="big" id="sumTotal">— Kč</div>
+                <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumTotal">— Kč</div>
               </div>
             </div>
           </div>
@@ -519,7 +515,7 @@
           </div>
 
           <div id="map"></div>
-          <div class="mini" style="margin-top:10px" id="mapStatus">Načítám…</div>
+          <div class="mini" style="margin-top:10px" id="mapStatus">Mapa není aktivní, dokud nenastavíš API key + Sheet.</div>
         </div>
 
         <div class="list">
@@ -529,7 +525,7 @@
       </div>
 
       <p class="mini" style="margin-top:12px">
-        Pokud se nic nezobrazuje: špatný API key / nepovolené API / chybí billing / sheet není publikovaný / špatné názvy sloupců.
+        Aby to fungovalo: Google Maps API key + povolené Maps JavaScript API a Geocoding API + Sheet dostupný pro čtení.
       </p>
     </div>
   </section>
@@ -568,7 +564,7 @@
 
       <div class="divider"></div>
 
-      <div class="card" style="padding:16px; background:rgba(255,255,255,.90);">
+      <div class="card" style="padding:16px; background:rgba(255,255,255,.92);">
         <div class="mini" style="display:grid; gap:6px;">
           <div><strong>BÚ:</strong> 6759779379/0800</div>
           <div><strong>Datová schránka:</strong> (doplňte)</div>
@@ -751,15 +747,7 @@
       }
 
       if(!valid){
-        return {
-          valid:false,
-          areaM2:0,
-          perimM:0,
-          cleanCost:0,
-          edgeCost:0,
-          impCost:0,
-          total:0
-        };
+        return { valid:false, areaM2:0, perimM:0, cleanCost:0, edgeCost:0, impCost:0, total:0 };
       }
 
       areaM2 = round2(areaM2);
@@ -773,7 +761,6 @@
       const impCost  = imp  ? Math.round(areaM2 * PRICE_IMP_PER_M2) : 0;
 
       const total = cleanCost + edgeCost + impCost;
-
       return { valid:true, areaM2, perimM, cleanCost, edgeCost, impCost, total };
     }
 
@@ -848,7 +835,6 @@
       ].join('<br>');
     }
 
-    // Debounce, aby se to nepřepočítávalo 50× za vteřinu při psaní
     function debounce(fn, wait){
       let t = null;
       return (...args) => {
@@ -866,32 +852,21 @@
 
     function resetRugs(){
       rugsEl.innerHTML = '';
-      addRug(); // aspoň jeden řádek
+      addRug();
     }
 
-    // Events (delegace)
     rugsEl.addEventListener('input', (e) => {
       const t = e.target;
-      if(!t) return;
-      if(t.matches('input[type="number"], input[type="text"], select, input[type="checkbox"]')){
+      if(t && t.matches('input, select')){
         computeAllDebounced();
       }
     });
-
-    rugsEl.addEventListener('change', (e) => {
-      const t = e.target;
-      if(!t) return;
-      if(t.matches('select, input[type="checkbox"]')){
-        computeAll();
-      }
-    });
-
+    rugsEl.addEventListener('change', () => computeAll());
     rugsEl.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-action="remove"]');
       if(!btn) return;
       const row = btn.closest('.rugRow');
       if(!row) return;
-
       row.remove();
       updateRowNumbering();
       computeAll();
@@ -900,13 +875,14 @@
     addRugBtn.addEventListener('click', addRug);
     resetRugsBtn.addEventListener('click', resetRugs);
 
-    // Init
     resetRugs();
 
     // =========================================================
-    // ====== MAP + SHEET ======================================
+    // ====== MAP + SHEET (volitelné) ===========================
     // =========================================================
-    // DOPLŇ:
+    // Pokud nechceš mapu zatím řešit, nech to takhle.
+    // Až budeš chtít, doplň API key + SHEET_ID a odkomentuj script s Google Maps dole.
+
     const SHEET_ID = "SPREADSHEET_ID_HERE";
     const SHEET_NAME = "Sheet1";
     const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
@@ -914,7 +890,7 @@
     let map, geocoder;
     let markers = [];
     let places = [];
-    let userOrigin = null; // {lat,lng}
+    let userOrigin = null;
     const mapStatus = document.getElementById('mapStatus');
     const placesList = document.getElementById('placesList');
 
@@ -1104,9 +1080,10 @@
       });
     }
 
+    // Tohle se spustí až po načtení Google Maps skriptu
     window.initMap = async function(){
       map = new google.maps.Map(document.getElementById("map"), {
-        center: {lat: 49.8175, lng: 15.4730}, // ČR
+        center: {lat: 49.8175, lng: 15.4730},
         zoom: 7,
         mapTypeControl: false,
         streetViewControl: false,
@@ -1122,10 +1099,17 @@
     document.getElementById('reloadBtn').addEventListener('click', loadPlaces);
   </script>
 
-  <!-- DOPLŇ API KEY -->
+  <!--
+    AŽ BUDEŠ CHTÍT MAPU:
+    1) doplň YOUR_GOOGLE_MAPS_API_KEY
+    2) doplň SHEET_ID nahoře
+    3) odkomentuj script níže
+  -->
+  <!--
   <script
     src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"
     async defer></script>
+  -->
 
 </body>
 </html>
