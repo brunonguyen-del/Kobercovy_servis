@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kobercový servis</title>
+
+<style>
+:root{
+ --text:#0f172a;
+ --muted:#64748b;
+ --line:#e5e7eb;
+ --accent:#2563eb;
+ --bg:#ffffff;
+}
+
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:system-ui,-apple-system,Segoe UI,Roboto;
+ color:var(--text);
+ background:white;
+}
+.wrap{max-width:1100px;margin:auto;padding:0 20px}
+section{padding:80px 0}
+
+/* NAV */
+.nav{
+ position:fixed;top:0;left:0;right:0;
+ background:rgba(255,255,255,.75);
+ backdrop-filter:blur(10px);
+ border-bottom:1px solid var(--line);
+ z-index:50;
+}
+.navin{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.menu a{margin-left:20px;color:#334155;text-decoration:none;font-weight:600}
+.menu a:hover{color:black}
+
+/* HERO */
+.hero{
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ position:relative;
+ overflow:hidden;
+ padding-top:70px;
+}
+.hero video{
+ position:absolute;inset:0;
+ width:100%;height:100%;
+ object-fit:cover;
+ opacity:.35;
+}
+.heroOverlay{
+ position:absolute;inset:0;
+ background:linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,.97));
+}
+.hero .wrap{position:relative;z-index:2}
+h1{font-size:46px;margin:0 0 15px}
+.lead{color:var(--muted);max-width:600px}
+
+/* PHOTO BACKGROUND */
+.photoSection{position:relative;overflow:hidden}
+.photoSection::before{
+ content:"";
+ position:absolute;inset:0;
+ background-size:cover;
+ background-position:center;
+ filter:saturate(.35) brightness(1.25) blur(2px);
+ transform:scale(1.05);
+}
+.photoSection::after{
+ content:"";
+ position:absolute;inset:0;
+ background:rgba(255,255,255,.9);
+}
+.photoSection .wrap{position:relative;z-index:2}
+
+/* CARDS */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{border:1px solid var(--line);border-radius:16px;padding:20px;background:white}
+.card h3{margin:0 0 6px}
+
+/* CALC */
+.rugRow{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.big{font-size:30px;font-weight:800}
+button{
+ padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+ background:white;font-weight:700;cursor:pointer
+}
+button.primary{background:var(--accent);color:white;border:0}
+
+/* MAP */
+#map{height:400px;border-radius:14px;border:1px solid var(--line)}
+
+/* MOBILE */
+@media(max-width:900px){
+.grid3{grid-template-columns:1fr}
+h1{font-size:34px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="nav">
+ <div class="wrap navin">
+  <strong>Kobercový servis</strong>
+  <div class="menu">
+   <a href="#sluzby">Služby</a>
+   <a href="#cenik">Ceník</a>
+   <a href="#sberna">Sběrná místa</a>
+   <a href="#kontakt">Kontakt</a>
+  </div>
+ </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+ <video autoplay muted loop playsinline poster="assets/poster.jpg">
+  <source src="assets/linka.mp4" type="video/mp4">
+ </video>
+ <div class="heroOverlay"></div>
+ <div class="wrap">
+  <h1>Automatizované čištění koberců</h1>
+  <p class="lead">Kusové koberce čistíme na automatizované lince. Spočítejte si cenu a najděte nejbližší sběrné místo.</p>
+ </div>
+</section>
+
+<!-- SLUŽBY -->
+<section id="sluzby" class="photoSection" style="background-image:url('assets/koberec1.jpg')">
+ <div class="wrap">
+  <h2>Služby</h2>
+  <div class="grid3">
+   <div class="card">
+    <h3>Čištění koberců</h3>
+    <p>vyklepání • odstranění znečištění • vyčištění • vysušení • vysátí • zabalení</p>
+   </div>
+   <div class="card">
+    <h3>Impregnace</h3>
+    <p>ochrana vláken proti dalšímu znečištění</p>
+   </div>
+   <div class="card">
+    <h3>Obšívání</h3>
+    <p>oprava a zakončení okrajů</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- CENÍK -->
+<section id="cenik" class="photoSection" style="background-image:url('assets/koberec2.jpg')">
+ <div class="wrap">
+  <h2>Kalkulačka</h2>
+
+  <div id="rugs"></div>
+  <button onclick="addRug()" class="primary">+ Přidat koberec</button>
+
+  <h3>Celkem</h3>
+  <div class="big" id="total">0 Kč</div>
+ </div>
+</section>
+
+<!-- SBĚRNÁ MÍSTA -->
+<section id="sberna">
+ <div class="wrap">
+  <h2>Sběrná místa</h2>
+  <div id="map"></div>
+ </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+ <div class="wrap">
+  <h2>Kontakt</h2>
+  <p><b>Kobercový servis, s. r. o.</b></p>
+  <p>Tel: +420 776 016 042<br>Email: info@kobercovyservis.cz</p>
+  <p>IČ: 24384453<br>DIČ: CZ24384453</p>
+  <p>Bělehradská 858/23, Praha 2</p>
+ </div>
+</section>
+
+<script>
+// jednoduchá kalkulačka
+function addRug(){
+ const row=document.createElement("div");
+ row.className="rugRow";
+ row.innerHTML=`
+ šířka cm <input type="number" class="w">
+ délka cm <input type="number" class="h">
+ obšívání <input type="checkbox" class="edge">
+ impregnace <input type="checkbox" class="imp">
+ `;
+ document.getElementById("rugs").appendChild(row);
+ row.oninput=calc;
+}
+
+function calc(){
+ let total=0;
+ document.querySelectorAll(".rugRow").forEach(r=>{
+  let w=r.querySelector(".w").value/100;
+  let h=r.querySelector(".h").value/100;
+  if(!w||!h)return;
+  let area=w*h;
+  let per=2*(w+h);
+  let price=area*300;
+  if(r.querySelector(".edge").checked)price+=per*99;
+  if(r.querySelector(".imp").checked)price+=area*40;
+  total+=price;
+ });
+ document.getElementById("total").innerText=Math.round(total)+" Kč";
+}
+
+addRug();
+</script>
+
+</body>
+</html>
