@@ -88,15 +88,14 @@
       position:absolute; inset:0;
       background:
         radial-gradient(900px 600px at 15% 20%, rgba(37,99,235,.14), transparent 60%),
-        /* Ztmaveno pro lepší čitelnost */
         linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.87) 55%, rgba(255,255,255,.98));
     }
     .heroContent{position:relative; z-index:2}
     .heroGrid{
       display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:16px;
-      align-items:stretch;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      align-items:center;
     }
     h1{
       margin:0 0 12px;
@@ -125,6 +124,7 @@
       color:white;
       box-shadow:0 10px 28px rgba(37,99,235,.20);
     }
+
     .pillRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
     .pill{
       border:1px solid var(--line);
@@ -136,15 +136,48 @@
     }
     .pill strong{color:var(--text)}
 
-    .heroSide{
-      padding:24px;
+    /* HERO IMAGE (linka) */
+    .machineWrap{
       border:1px solid var(--line);
       border-radius:var(--radius);
-      background:rgba(255,255,255,.82);
+      background:rgba(255,255,255,.78);
       backdrop-filter: blur(10px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .machineTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .machineTitle .t{
+      font-weight:950;
+      letter-spacing:-.2px;
+      font-size:16px;
+    }
+    .machineTitle .tag{
+      font-size:12px;
+      color:rgba(37,99,235,.92);
+      border:1px solid rgba(37,99,235,.25);
+      background:rgba(37,99,235,.06);
+      padding:6px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .machineImg{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:14px;
+      background:transparent;
+    }
+    .machineNote{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
     }
 
     /* PHOTO BACKGROUND SECTIONS */
@@ -155,7 +188,6 @@
       background-image: var(--bgimg);
       background-size:cover;
       background-position:center;
-      /* Ztmaveno: původní brightness(1.25) -> brightness(1.10) */
       filter: saturate(.35) brightness(1.10) contrast(.9) blur(2px);
       transform: scale(1.05);
       z-index:0;
@@ -163,7 +195,6 @@
     .photoSection::after{
       content:"";
       position:absolute; inset:0;
-      /* Ztmaveno: mírně nižší průhlednost bílé */
       background: linear-gradient(rgba(255,255,255,.80), rgba(255,255,255,.92));
       z-index:1;
     }
@@ -327,6 +358,7 @@
       #map{height:360px}
       .list{min-height:360px}
       .row{grid-template-columns:1fr}
+      .machineWrap{padding:14px}
     }
     @media (max-width: 700px){
       .logoNav{height:38px}
@@ -339,7 +371,7 @@
   <div class="nav">
     <div class="wrap navin">
       <div class="brand">
-        <img class="logoNav" src="./assets/logo.jpg" alt="Kobercový servis">
+        <img class="logoNav" src="./assets/logo.png" alt="Kobercový servis">
       </div>
       <div class="menu">
         <a href="#uvod">Úvod</a>
@@ -374,21 +406,38 @@
             <span class="pill"><strong>Obšívání</strong> 99 Kč/m</span>
             <span class="pill"><strong>Impregnace</strong> 40 Kč/m²</span>
           </div>
-        </div>
 
-        <div class="heroSide">
-          <div style="font-weight:950; margin-bottom:8px; font-size:18px;">Potřebujete znát cenu?</div>
-          <p class="muted" style="font-size:14px; margin-bottom: 20px;">
-            Použijte naši interaktivní kalkulačku pro přesný odhad ceny čištění.
-          </p>
-          <a href="#cenik" class="btn btnPrimary" style="width: 100%; padding: 16px;">
-            Otevřít kalkulačku
-          </a>
           <div class="divider"></div>
-          <div class="muted" style="font-size:12px;">
-            Základní čištění zahrnuje: vyklepání, odstranění znečištění, vysušení a zabalení.
+
+          <div class="card" style="padding:16px; background:rgba(255,255,255,.82); box-shadow:none;">
+            <div style="font-weight:950; margin-bottom:6px;">Základní čištění zahrnuje</div>
+            <div class="muted" style="font-size:14px;">
+              vyklepání • odstranění znečištění • vyčištění • vysušení • vysátí • zabalení
+            </div>
+            <div class="mini" style="margin-top:8px;">
+              Impregnace a obšívání jsou volitelné a počítají se v kalkulačce.
+            </div>
           </div>
         </div>
+
+        <!-- PRAVÁ STRANA: obrázek linky -->
+        <div class="machineWrap">
+          <div class="machineTitle">
+            <div class="t">Automatizovaná čistící linka</div>
+            <div class="tag">nejmodernější řešení</div>
+          </div>
+
+          <img class="machineImg" src="./assets/linka.png" alt="Automatizovaná čistící linka">
+
+          <div class="machineNote">
+            Tohle je důvod, proč to dává smysl: konzistentní postup, vysoká kapacita a stabilní kvalita čištění.
+          </div>
+
+          <div style="margin-top:12px;">
+            <a href="#cenik" class="btn btnPrimary" style="width:100%; padding:14px;">Otevřít kalkulačku</a>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -879,4 +928,5 @@
   </script>
 
 </body>
-</html>
+</html> tohle je posledni verze ted jsem vymenil obrazek loga za logo.png a pridal obrazek cistici linky s nazvem linka.png zakomponuj tu linku nekde na hlavni sekci vedle textu ma pruhledne pozadi 
+::contentReference[oaicite:0]{index=0}
