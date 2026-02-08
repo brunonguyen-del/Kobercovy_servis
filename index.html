@@ -52,11 +52,11 @@
       border-bottom:1px solid var(--line);
     }
     .navin{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0}
-    .brand{display:flex; align-items:center; gap:10px; font-weight:950; letter-spacing:.2px}
-    .dot{
-      width:10px; height:10px; border-radius:50%;
-      background:var(--accent);
-      box-shadow:0 0 0 6px rgba(37,99,235,.12);
+    .brand{display:flex; align-items:center; gap:10px}
+    .logoNav{
+      height:46px;
+      width:auto;
+      display:block;
     }
     .menu{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
     .menu a{
@@ -79,7 +79,7 @@
       min-height:100vh;
       display:flex;
       align-items:center;
-      padding-top:76px; /* fixed nav */
+      padding-top:76px;
       position:relative;
       overflow:hidden;
       background: url("./assets/poster.jpg") center/cover no-repeat;
@@ -140,6 +140,12 @@
       border-radius:var(--radius);
       background:rgba(255,255,255,.82);
       backdrop-filter: blur(10px);
+    }
+    .heroLogo{
+      height:74px;
+      width:auto;
+      display:block;
+      margin-bottom:18px;
     }
 
     /* PHOTO BACKGROUND SECTIONS */
@@ -324,6 +330,10 @@
       .list{min-height:360px}
       .row{grid-template-columns:1fr}
     }
+    @media (max-width: 700px){
+      .logoNav{height:38px}
+      .heroLogo{height:62px}
+    }
   </style>
 </head>
 
@@ -333,8 +343,7 @@
   <div class="nav">
     <div class="wrap navin">
       <div class="brand">
-        <span class="dot"></span>
-        <span>Kobercový servis</span>
+        <img class="logoNav" src="./assets/logo.png" alt="Kobercový servis">
       </div>
       <div class="menu">
         <a href="#uvod">Úvod</a>
@@ -354,6 +363,8 @@
     <div class="wrap heroContent">
       <div class="heroGrid">
         <div>
+          <img class="heroLogo" src="./assets/logo.png" alt="Kobercový servis logo">
+
           <h1>Automatizované čištění<br/>kusových koberců</h1>
           <p class="lead">
             Čistíme koberce na automatizované lince. Spočítej cenu hned teď, klidně i pro víc koberců,
@@ -390,7 +401,7 @@
   <section id="sluzby" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Služby</h2>
-      <p class="muted">Tři jasné služby. Žádný “marketingový kouzla”, prostě to, co fakt děláte.</p>
+      <p class="muted">Tři jasné služby. Žádný marketingový pohádky — prostě to, co fakt děláte.</p>
 
       <div class="grid3" style="margin-top:14px;">
         <div class="card box">
@@ -488,7 +499,7 @@
   <section id="sberna">
     <div class="wrap">
       <h2 class="sectionTitle">Sběrná místa</h2>
-      <p class="muted">Zadej adresu nebo použij aktuální polohu. Ukážeme nejbližší sběrná místa z Google Sheetu.</p>
+      <p class="muted">Mapa je připravená, jen zatím není aktivní (API key + Google Sheet). Až to budeš chtít zprovoznit, doděláme.</p>
 
       <div class="card mapGrid" style="margin-top:14px;">
         <div>
@@ -515,7 +526,7 @@
           </div>
 
           <div id="map"></div>
-          <div class="mini" style="margin-top:10px" id="mapStatus">Mapa není aktivní, dokud nenastavíš API key + Sheet.</div>
+          <div class="mini" style="margin-top:10px" id="mapStatus">Mapa není aktivní (API key + Sheet).</div>
         </div>
 
         <div class="list">
@@ -523,10 +534,6 @@
           <div class="cards" id="placesList"></div>
         </div>
       </div>
-
-      <p class="mini" style="margin-top:12px">
-        Aby to fungovalo: Google Maps API key + povolené Maps JavaScript API a Geocoding API + Sheet dostupný pro čtení.
-      </p>
     </div>
   </section>
 
@@ -579,12 +586,9 @@
   </footer>
 
   <script>
-    // ====== YEAR ======
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // =========================================================
-    // ====== CALC (AUTO + MULTI) ===============================
-    // =========================================================
+    // ====== CALC (AUTO + MULTI) ======
     const PRICE_CLEAN_PER_M2 = 300;
     const PRICE_EDGE_PER_M = 99;
     const PRICE_IMP_PER_M2 = 40;
@@ -602,7 +606,6 @@
     function czk(n){ return new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 0 }).format(n); }
     function numOk(x){ return Number.isFinite(x) && x > 0; }
 
-    // Ramanujan approx for ellipse circumference
     function ellipsePerimeter(aSemi_m, bSemi_m){
       const a = aSemi_m, b = bSemi_m;
       return Math.PI * (3*(a+b) - Math.sqrt((3*a + b)*(a + 3*b)));
@@ -877,239 +880,11 @@
 
     resetRugs();
 
-    // =========================================================
-    // ====== MAP + SHEET (volitelné) ===========================
-    // =========================================================
-    // Pokud nechceš mapu zatím řešit, nech to takhle.
-    // Až budeš chtít, doplň API key + SHEET_ID a odkomentuj script s Google Maps dole.
-
-    const SHEET_ID = "SPREADSHEET_ID_HERE";
-    const SHEET_NAME = "Sheet1";
-    const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
-
-    let map, geocoder;
-    let markers = [];
-    let places = [];
-    let userOrigin = null;
-    const mapStatus = document.getElementById('mapStatus');
-    const placesList = document.getElementById('placesList');
-
-    function haversineKm(a, b){
-      const R = 6371;
-      const toRad = (x)=> x * Math.PI/180;
-      const dLat = toRad(b.lat - a.lat);
-      const dLng = toRad(b.lng - a.lng);
-      const lat1 = toRad(a.lat);
-      const lat2 = toRad(b.lat);
-      const s = Math.sin(dLat/2)**2 + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2;
-      return 2 * R * Math.asin(Math.sqrt(s));
-    }
-
-    function parseCSV(text){
-      const lines = text.trim().split(/\r?\n/);
-      const rows = lines.map(line => {
-        const out = [];
-        let cur = "", inQ = false;
-        for(let i=0;i<line.length;i++){
-          const ch = line[i];
-          if(ch === '"'){ inQ = !inQ; continue; }
-          if(ch === ',' && !inQ){ out.push(cur); cur=""; continue; }
-          cur += ch;
-        }
-        out.push(cur);
-        return out.map(x => x.trim());
-      });
-      const header = rows.shift().map(h => h.toLowerCase());
-      return rows.map(r => {
-        const obj = {};
-        header.forEach((h, i) => obj[h] = r[i] ?? "");
-        return obj;
-      });
-    }
-
-    async function loadPlaces(){
-      mapStatus.textContent = "Načítám sběrná místa z Google Sheetu…";
-      try{
-        const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
-        if(!res.ok) throw new Error(`HTTP ${res.status}`);
-        const csv = await res.text();
-        const data = parseCSV(csv);
-
-        places = data
-          .map(p => ({
-            name: p.name || "Sběrné místo",
-            address: p.address || "",
-            note: p.note || "",
-            lat: parseFloat(String(p.lat).replace(',', '.')),
-            lng: parseFloat(String(p.lng).replace(',', '.')),
-          }))
-          .filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lng));
-
-        if(places.length === 0){
-          mapStatus.textContent = "Sheet se načetl, ale nenašel jsem žádné validní lat/lng.";
-          return;
-        }
-
-        renderMarkers();
-        mapStatus.textContent = `Načteno sběrných míst: ${places.length}`;
-        renderNearestList();
-      } catch(e){
-        console.error(e);
-        mapStatus.textContent = "Nepodařilo se načíst sběrná místa. Zkontroluj: publikovaný Sheet, správné ID/list, sloupce name/address/lat/lng.";
-      }
-    }
-
-    function clearMarkers(){
-      markers.forEach(m => m.setMap(null));
-      markers = [];
-    }
-
-    function renderMarkers(){
-      if(!map) return;
-      clearMarkers();
-
-      const bounds = new google.maps.LatLngBounds();
-      places.forEach((p, idx) => {
-        const m = new google.maps.Marker({
-          map,
-          position: {lat:p.lat, lng:p.lng},
-          title: p.name
-        });
-        m.__idx = idx;
-        m.addListener('click', () => focusPlace(idx, true));
-        markers.push(m);
-        bounds.extend(m.getPosition());
-      });
-      map.fitBounds(bounds, 60);
-    }
-
-    function focusPlace(idx, pan){
-      const p = places[idx];
-      if(!p) return;
-
-      if(pan) map.panTo({lat:p.lat, lng:p.lng});
-
-      [...placesList.querySelectorAll('.placeCard')].forEach(el => el.classList.remove('active'));
-      const el = document.getElementById(`place_${idx}`);
-      if(el) el.classList.add('active');
-
-      mapStatus.textContent = `${p.name} — ${p.address}${p.note ? " • " + p.note : ""}`;
-    }
-
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function renderNearestList(){
-      if(!places || places.length === 0) return;
-
-      let sorted = [...places].map((p,i)=> ({...p, _i:i, distKm:null}));
-      if(userOrigin){
-        sorted = sorted
-          .map(x => ({...x, distKm: haversineKm(userOrigin, {lat:x.lat, lng:x.lng})}))
-          .sort((a,b) => a.distKm - b.distKm);
-      }
-
-      const top = sorted.slice(0, 8);
-
-      placesList.innerHTML = top.map(x => {
-        const dist = (x.distKm == null) ? "" : `<div class="d">${x.distKm.toFixed(1)} km</div>`;
-        const note = x.note ? ` • ${x.note}` : "";
-        return `
-          <div class="placeCard" id="place_${x._i}" data-idx="${x._i}">
-            <div class="t">${escapeHtml(x.name)}</div>
-            <div class="a">${escapeHtml(x.address)}${escapeHtml(note)}</div>
-            ${dist}
-          </div>
-        `;
-      }).join("");
-
-      placesList.querySelectorAll(".placeCard").forEach(card => {
-        card.addEventListener("click", () => {
-          const idx = parseInt(card.getAttribute("data-idx"), 10);
-          focusPlace(idx, true);
-        });
-      });
-
-      if(top[0]) focusPlace(top[0]._i, false);
-    }
-
-    function setOrigin(origin){
-      userOrigin = origin;
-      new google.maps.Marker({
-        map,
-        position: origin,
-        title: "Vaše poloha / hledaná adresa"
-      });
-      renderNearestList();
-      map.panTo(origin);
-      map.setZoom(11);
-    }
-
-    function geolocate(){
-      if(!navigator.geolocation) return alert("Prohlížeč nepodporuje geolokaci.");
-      mapStatus.textContent = "Zjišťuju aktuální polohu…";
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const origin = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-          mapStatus.textContent = "Poloha nalezena. Počítám nejbližší místa…";
-          setOrigin(origin);
-        },
-        () => { mapStatus.textContent = "Poloha nedostupná (zamítnuto / chyba). Zkus vyhledání podle adresy."; },
-        { enableHighAccuracy:true, timeout:12000 }
-      );
-    }
-
-    function searchByAddress(){
-      const addr = document.getElementById('addr').value.trim();
-      if(!addr) return alert("Zadej adresu.");
-      mapStatus.textContent = "Hledám adresu…";
-      geocoder.geocode({ address: addr }, (results, status) => {
-        if(status !== "OK" || !results[0]){
-          mapStatus.textContent = "Adresu se nepodařilo najít. Zkus ji napsat přesněji.";
-          return;
-        }
-        const loc = results[0].geometry.location;
-        setOrigin({ lat: loc.lat(), lng: loc.lng() });
-        mapStatus.textContent = "Adresa nalezena. Počítám nejbližší místa…";
-      });
-    }
-
-    // Tohle se spustí až po načtení Google Maps skriptu
-    window.initMap = async function(){
-      map = new google.maps.Map(document.getElementById("map"), {
-        center: {lat: 49.8175, lng: 15.4730},
-        zoom: 7,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false
-      });
-      geocoder = new google.maps.Geocoder();
-      mapStatus.textContent = "Mapa připravena. Načítám místa…";
-      await loadPlaces();
-    };
-
-    document.getElementById('geoBtn').addEventListener('click', geolocate);
-    document.getElementById('searchAddrBtn').addEventListener('click', searchByAddress);
-    document.getElementById('reloadBtn').addEventListener('click', loadPlaces);
+    // Map zatím neaktivní (chybí Google Maps script)
+    document.getElementById('geoBtn').addEventListener('click', () => alert('Mapa zatím není aktivní (API key + Google Sheet).'));
+    document.getElementById('searchAddrBtn').addEventListener('click', () => alert('Mapa zatím není aktivní (API key + Google Sheet).'));
+    document.getElementById('reloadBtn').addEventListener('click', () => alert('Mapa zatím není aktivní (API key + Google Sheet).'));
   </script>
-
-  <!--
-    AŽ BUDEŠ CHTÍT MAPU:
-    1) doplň YOUR_GOOGLE_MAPS_API_KEY
-    2) doplň SHEET_ID nahoře
-    3) odkomentuj script níže
-  -->
-  <!--
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"
-    async defer></script>
-  -->
 
 </body>
 </html>
