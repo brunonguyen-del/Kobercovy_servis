@@ -74,7 +74,7 @@
     }
     .cta:hover{filter:brightness(1.03)}
 
-    /* HERO (bez loga, jen text + pozadí poster) */
+    /* HERO */
     .hero{
       min-height:100vh;
       display:flex;
@@ -88,7 +88,8 @@
       position:absolute; inset:0;
       background:
         radial-gradient(900px 600px at 15% 20%, rgba(37,99,235,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.70), rgba(255,255,255,.92) 55%, rgba(255,255,255,1));
+        /* Ztmaveno: původní .70 -> .65 a .92 -> .87 */
+        linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.87) 55%, rgba(255,255,255,.98));
     }
     .heroContent{position:relative; z-index:2}
     .heroGrid{
@@ -115,8 +116,9 @@
       color:var(--text);
       font-weight:950;
       cursor:pointer;
+      transition: all .2s ease;
     }
-    .btn:hover{background:rgba(15,23,42,.04)}
+    .btn:hover{background:rgba(15,23,42,.04); transform: translateY(-1px);}
     .btnPrimary{
       border:0;
       background:linear-gradient(135deg, rgba(37,99,235,.98), rgba(96,165,250,.92));
@@ -135,11 +137,14 @@
     .pill strong{color:var(--text)}
 
     .heroSide{
-      padding:16px;
+      padding:24px;
       border:1px solid var(--line);
       border-radius:var(--radius);
       background:rgba(255,255,255,.82);
       backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     /* PHOTO BACKGROUND SECTIONS */
@@ -150,14 +155,16 @@
       background-image: var(--bgimg);
       background-size:cover;
       background-position:center;
-      filter: saturate(.35) brightness(1.25) contrast(.9) blur(2px);
+      /* Ztmaveno: původní brightness(1.25) -> brightness(1.10) */
+      filter: saturate(.35) brightness(1.10) contrast(.9) blur(2px);
       transform: scale(1.05);
       z-index:0;
     }
     .photoSection::after{
       content:"";
       position:absolute; inset:0;
-      background: linear-gradient(rgba(255,255,255,.86), rgba(255,255,255,.96));
+      /* Ztmaveno: mírně nižší průhlednost bílé */
+      background: linear-gradient(rgba(255,255,255,.80), rgba(255,255,255,.92));
       z-index:1;
     }
     .photoSection > .wrap{position:relative; z-index:2}
@@ -329,11 +336,9 @@
 
 <body>
 
-  <!-- NAV -->
   <div class="nav">
     <div class="wrap navin">
       <div class="brand">
-        <!-- LOGO jen v hlavičce -->
         <img class="logoNav" src="./assets/logo.jpg" alt="Kobercový servis">
       </div>
       <div class="menu">
@@ -347,7 +352,6 @@
     </div>
   </div>
 
-  <!-- HERO -->
   <section id="uvod" class="hero">
     <div class="heroOverlay" aria-hidden="true"></div>
 
@@ -361,8 +365,8 @@
           </p>
 
           <div class="heroBtns">
-            <a class="btn btnPrimary" href="#cenik">Spočítat cenu</a>
-            <a class="btn" href="#sberna">Najít sběrné místo</a>
+            <a class="btn btnPrimary" href="#cenik">Ceník služeb</a>
+            <a class="btn" href="#sberna">Sběrná místa</a>
           </div>
 
           <div class="pillRow">
@@ -373,24 +377,26 @@
         </div>
 
         <div class="heroSide">
-          <div style="font-weight:950; margin-bottom:8px;">Základní čištění zahrnuje</div>
-          <div class="muted" style="font-size:14px;">
-            vyklepání • odstranění znečištění • vyčištění • vysušení • vysátí • zabalení
-          </div>
+          <div style="font-weight:950; margin-bottom:8px; font-size:18px;">Potřebujete znát cenu?</div>
+          <p class="muted" style="font-size:14px; margin-bottom: 20px;">
+            Použijte naši interaktivní kalkulačku pro přesný odhad ceny čištění.
+          </p>
+          <a href="#cenik" class="btn btnPrimary" style="width: 100%; padding: 16px;">
+            Otevřít kalkulačku
+          </a>
           <div class="divider"></div>
-          <div class="mini">
-            Impregnace a obšívání jsou volitelné a připočítají se v kalkulačce.
+          <div class="muted" style="font-size:12px;">
+            Základní čištění zahrnuje: vyklepání, odstranění znečištění, vysušení a zabalení.
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SLUŽBY -->
   <section id="sluzby" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Služby</h2>
-      <p class="muted">Tři jasné služby. Žádný marketingový pohádky — prostě to, co fakt děláte.</p>
+      <p class="muted">Tři jasné služby. Žádné marketingové pohádky — prostě to, co fakt děláme.</p>
 
       <div class="grid3" style="margin-top:14px;">
         <div class="card box">
@@ -430,7 +436,6 @@
     </div>
   </section>
 
-  <!-- CENÍK -->
   <section id="cenik" class="photoSection" style="--bgimg:url('./assets/koberec2.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Ceník a kalkulačka</h2>
@@ -484,11 +489,10 @@
     </div>
   </section>
 
-  <!-- SBĚRNÁ MÍSTA -->
   <section id="sberna">
     <div class="wrap">
       <h2 class="sectionTitle">Sběrná místa</h2>
-      <p class="muted">Mapa je připravená, jen zatím není aktivní (API key + Google Sheet). Až to budeš chtít zprovoznit, doděláme.</p>
+      <p class="muted">Mapa a vyhledávání budou plně funkční po dopojení Google Maps API.</p>
 
       <div class="card mapGrid" style="margin-top:14px;">
         <div>
@@ -515,7 +519,7 @@
           </div>
 
           <div id="map"></div>
-          <div class="mini" style="margin-top:10px" id="mapStatus">Mapa není aktivní (API key + Google Sheet).</div>
+          <div class="mini" style="margin-top:10px" id="mapStatus">Mapa je v režimu přípravy (Google Maps API).</div>
         </div>
 
         <div class="list">
@@ -526,7 +530,6 @@
     </div>
   </section>
 
-  <!-- KONTAKT -->
   <section id="kontakt">
     <div class="wrap">
       <h2 class="sectionTitle">Kontakt</h2>
@@ -869,10 +872,10 @@
 
     resetRugs();
 
-    // Map zatím neaktivní (chybí Google Maps script)
-    document.getElementById('geoBtn').addEventListener('click', () => alert('Mapa zatím není aktivní (API key + Google Sheet).'));
-    document.getElementById('searchAddrBtn').addEventListener('click', () => alert('Mapa zatím není aktivní (API key + Google Sheet).'));
-    document.getElementById('reloadBtn').addEventListener('click', () => alert('Mapa zatím není aktivní (API key + Google Sheet).'));
+    // Map zatím neaktivní
+    document.getElementById('geoBtn').addEventListener('click', () => alert('Mapa se připravuje (čeká na Google Maps API).'));
+    document.getElementById('searchAddrBtn').addEventListener('click', () => alert('Mapa se připravuje.'));
+    document.getElementById('reloadBtn').addEventListener('click', () => alert('Mapa se připravuje.'));
   </script>
 
 </body>
