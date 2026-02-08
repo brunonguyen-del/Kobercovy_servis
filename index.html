@@ -74,7 +74,7 @@
     }
     .cta:hover{filter:brightness(1.03)}
 
-    /* HERO (bez videa jede jen poster background) */
+    /* HERO (bez loga, jen text + pozadí poster) */
     .hero{
       min-height:100vh;
       display:flex;
@@ -141,18 +141,9 @@
       background:rgba(255,255,255,.82);
       backdrop-filter: blur(10px);
     }
-    .heroLogo{
-      height:74px;
-      width:auto;
-      display:block;
-      margin-bottom:18px;
-    }
 
     /* PHOTO BACKGROUND SECTIONS */
-    .photoSection{
-      position:relative;
-      overflow:hidden;
-    }
+    .photoSection{position:relative; overflow:hidden;}
     .photoSection::before{
       content:"";
       position:absolute; inset:0;
@@ -332,7 +323,6 @@
     }
     @media (max-width: 700px){
       .logoNav{height:38px}
-      .heroLogo{height:62px}
     }
   </style>
 </head>
@@ -343,6 +333,7 @@
   <div class="nav">
     <div class="wrap navin">
       <div class="brand">
+        <!-- LOGO jen v hlavičce -->
         <img class="logoNav" src="./assets/logo.jpg" alt="Kobercový servis">
       </div>
       <div class="menu">
@@ -363,8 +354,6 @@
     <div class="wrap heroContent">
       <div class="heroGrid">
         <div>
-          <img class="heroLogo" src="./assets/logo.jpg" alt="Kobercový servis logo">
-
           <h1>Automatizované čištění<br/>kusových koberců</h1>
           <p class="lead">
             Čistíme koberce na automatizované lince. Spočítej cenu hned teď, klidně i pro víc koberců,
@@ -526,7 +515,7 @@
           </div>
 
           <div id="map"></div>
-          <div class="mini" style="margin-top:10px" id="mapStatus">Mapa není aktivní (API key + Sheet).</div>
+          <div class="mini" style="margin-top:10px" id="mapStatus">Mapa není aktivní (API key + Google Sheet).</div>
         </div>
 
         <div class="list">
@@ -888,4 +877,3 @@
 
 </body>
 </html>
-
