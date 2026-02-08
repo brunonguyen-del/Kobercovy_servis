@@ -51,13 +51,20 @@
       backdrop-filter: blur(12px);
       border-bottom:1px solid var(--line);
     }
-    .navin{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0}
+    .navin{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+    }
     .brand{display:flex; align-items:center; gap:10px}
     .logoNav{
-      height:46px;
+      height:138px;  /* 3× větší než původních 46px */
       width:auto;
       display:block;
     }
+
     .menu{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
     .menu a{
       color:var(--muted);
@@ -79,7 +86,7 @@
       min-height:100vh;
       display:flex;
       align-items:center;
-      padding-top:76px;
+      padding-top:170px; /* protože logo v nav je větší */
       position:relative;
       overflow:hidden;
       background: url("./assets/poster.jpg") center/cover no-repeat;
@@ -94,7 +101,7 @@
     .heroGrid{
       display:grid;
       grid-template-columns: 1.1fr .9fr;
-      gap:18px;
+      gap:20px;
       align-items:center;
     }
     h1{
@@ -136,48 +143,13 @@
     }
     .pill strong{color:var(--text)}
 
-    /* HERO IMAGE (linka) */
-    .machineWrap{
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:rgba(255,255,255,.78);
-      backdrop-filter: blur(10px);
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
-    .machineTitle{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:12px;
-    }
-    .machineTitle .t{
-      font-weight:950;
-      letter-spacing:-.2px;
-      font-size:16px;
-    }
-    .machineTitle .tag{
-      font-size:12px;
-      color:rgba(37,99,235,.92);
-      border:1px solid rgba(37,99,235,.25);
-      background:rgba(37,99,235,.06);
-      padding:6px 10px;
-      border-radius:999px;
-      white-space:nowrap;
-    }
+    /* HERO IMAGE (linka) – čistě jen obrázek */
     .machineImg{
       width:100%;
       height:auto;
       display:block;
-      border-radius:14px;
       background:transparent;
-    }
-    .machineNote{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.5;
+      filter: drop-shadow(0 18px 45px rgba(15,23,42,.14));
     }
 
     /* PHOTO BACKGROUND SECTIONS */
@@ -358,10 +330,13 @@
       #map{height:360px}
       .list{min-height:360px}
       .row{grid-template-columns:1fr}
-      .machineWrap{padding:14px}
+      .logoNav{height:96px}
+      .hero{padding-top:140px}
+      .machineImg{max-width:620px; margin:0 auto;}
     }
     @media (max-width: 700px){
-      .logoNav{height:38px}
+      .logoNav{height:78px}
+      .hero{padding-top:120px}
     }
   </style>
 </head>
@@ -389,6 +364,8 @@
 
     <div class="wrap heroContent">
       <div class="heroGrid">
+
+        <!-- VLEVO TEXT -->
         <div>
           <h1>Automatizované čištění<br/>kusových koberců</h1>
           <p class="lead">
@@ -420,22 +397,9 @@
           </div>
         </div>
 
-        <!-- PRAVÁ STRANA: obrázek linky -->
-        <div class="machineWrap">
-          <div class="machineTitle">
-            <div class="t">Automatizovaná čistící linka</div>
-            <div class="tag">nejmodernější řešení</div>
-          </div>
-
+        <!-- VPRAVO jen samotný obrázek linky (bez bloku) -->
+        <div>
           <img class="machineImg" src="./assets/linka.png" alt="Automatizovaná čistící linka">
-
-          <div class="machineNote">
-            Tohle je důvod, proč to dává smysl: konzistentní postup, vysoká kapacita a stabilní kvalita čištění.
-          </div>
-
-          <div style="margin-top:12px;">
-            <a href="#cenik" class="btn btnPrimary" style="width:100%; padding:14px;">Otevřít kalkulačku</a>
-          </div>
         </div>
 
       </div>
@@ -928,5 +892,4 @@
   </script>
 
 </body>
-</html> tohle je posledni verze ted jsem vymenil obrazek loga za logo.png a pridal obrazek cistici linky s nazvem linka.png zakomponuj tu linku nekde na hlavni sekci vedle textu ma pruhledne pozadi 
-::contentReference[oaicite:0]{index=0}
+</html>
