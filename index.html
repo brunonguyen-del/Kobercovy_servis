@@ -44,11 +44,11 @@
       box-shadow:var(--shadow);
     }
 
-    /* NAV */
+    /* NAV (zmenšeno – logo velké, ale header nízký) */
     .nav{
       position:fixed; inset:0 0 auto 0; z-index:50;
       background:rgba(255,255,255,.72);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(10px);
       border-bottom:1px solid var(--line);
     }
     .navin{
@@ -56,11 +56,11 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:12px 0;
+      padding:6px 0; /* bylo 12px */
     }
     .brand{display:flex; align-items:center; gap:10px}
     .logoNav{
-      height:138px;  /* 3× větší než původních 46px */
+      height:110px; /* velké, ale už ne “přes půl obrazovky” */
       width:auto;
       display:block;
     }
@@ -71,6 +71,7 @@
       padding:8px 10px;
       border-radius:12px;
       border:1px solid transparent;
+      font-size:14px;
     }
     .menu a:hover{color:var(--text); border-color:var(--line); background:rgba(15,23,42,.04)}
     .cta{
@@ -86,7 +87,8 @@
       min-height:100vh;
       display:flex;
       align-items:center;
-      padding-top:170px; /* protože logo v nav je větší */
+      /* menší než dřív – díky menší hlavičce */
+      padding-top:140px;
       position:relative;
       overflow:hidden;
       background: url("./assets/poster.jpg") center/cover no-repeat;
@@ -178,10 +180,10 @@
     .box h3{margin:0 0 8px; font-size:16px}
     .box p{margin:0; color:var(--muted); font-size:14px}
 
-    /* Steps */
+    /* Steps – 8 kroků */
     .steps{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap:14px;
       margin-top:14px;
     }
@@ -192,7 +194,7 @@
       background:rgba(255,255,255,.90);
     }
     .step .n{
-      width:28px; height:28px; border-radius:10px;
+      width:30px; height:30px; border-radius:10px;
       display:inline-flex; align-items:center; justify-content:center;
       border:1px solid var(--line);
       color:var(--muted);
@@ -205,7 +207,7 @@
 
     /* Inputs */
     label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
-    input, select{
+    input, select, textarea{
       width:100%;
       padding:12px 12px;
       border-radius:14px;
@@ -213,8 +215,10 @@
       background:rgba(255,255,255,.92);
       color:var(--text);
       outline:none;
+      font-family: inherit;
     }
-    input:focus, select:focus{
+    textarea{min-height:130px; resize:vertical}
+    input:focus, select:focus, textarea:focus{
       border-color:rgba(37,99,235,.55);
       box-shadow:0 0 0 4px rgba(37,99,235,.12);
     }
@@ -296,27 +300,31 @@
     }
     .listHead{padding:12px 12px; border-bottom:1px solid var(--line); color:var(--muted); font-size:13px}
     .cards{padding:10px; display:grid; gap:10px; overflow:auto}
-    .placeCard{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.96);
-      border-radius:14px;
-      padding:12px;
-      cursor:pointer;
-    }
-    .placeCard:hover{border-color:rgba(37,99,235,.35)}
-    .placeCard.active{
-      border-color:rgba(37,99,235,.85);
-      box-shadow:0 0 0 4px rgba(37,99,235,.12);
-    }
-    .placeCard .t{font-weight:950}
-    .placeCard .a{color:var(--muted); font-size:13px; margin-top:4px}
-    .placeCard .d{color:rgba(37,99,235,.92); font-size:13px; margin-top:8px}
 
     footer{
       padding:32px 0 40px;
       color:var(--muted);
       border-top:1px solid var(--line);
       background:rgba(255,255,255,.65);
+    }
+
+    /* Form */
+    .formGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    .formCard{padding:16px}
+    .formRow{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+    .hint{
+      border:1px solid rgba(37,99,235,.18);
+      background:rgba(37,99,235,.06);
+      border-radius:14px;
+      padding:12px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
     }
 
     @media (max-width: 920px){
@@ -330,13 +338,15 @@
       #map{height:360px}
       .list{min-height:360px}
       .row{grid-template-columns:1fr}
-      .logoNav{height:96px}
-      .hero{padding-top:140px}
+      .formGrid{grid-template-columns:1fr}
+      .formRow{grid-template-columns:1fr}
+      .logoNav{height:86px}
+      .hero{padding-top:120px}
       .machineImg{max-width:620px; margin:0 auto;}
     }
     @media (max-width: 700px){
-      .logoNav{height:78px}
-      .hero{padding-top:120px}
+      .logoNav{height:74px}
+      .hero{padding-top:110px}
     }
   </style>
 </head>
@@ -353,8 +363,9 @@
         <a href="#sluzby">Služby</a>
         <a href="#cenik">Ceník</a>
         <a href="#sberna">Sběrná místa</a>
+        <a href="#poptavka">Poptávka</a>
         <a href="#kontakt">Kontakt</a>
-        <a href="#kontakt"><button class="cta">Kontaktovat</button></a>
+        <a href="#poptavka"><button class="cta">Poslat poptávku</button></a>
       </div>
     </div>
   </div>
@@ -365,7 +376,6 @@
     <div class="wrap heroContent">
       <div class="heroGrid">
 
-        <!-- VLEVO TEXT -->
         <div>
           <h1>Automatizované čištění<br/>kusových koberců</h1>
           <p class="lead">
@@ -397,7 +407,6 @@
           </div>
         </div>
 
-        <!-- VPRAVO jen samotný obrázek linky (bez bloku) -->
         <div>
           <img class="machineImg" src="./assets/linka.png" alt="Automatizovaná čistící linka">
         </div>
@@ -428,22 +437,48 @@
 
       <div class="divider"></div>
 
-      <h3 style="margin:0; font-size:16px; letter-spacing:-.1px;">Jak probíhá základní čištění</h3>
+      <h3 style="margin:0; font-size:16px; letter-spacing:-.1px;">Jak probíhá čištění</h3>
+
       <div class="steps">
         <div class="step">
           <div class="n">1</div>
+          <p class="t">Zaměření a evidence</p>
+          <p class="d">Změříme, zaevidujeme a přiřadíme zakázku.</p>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
           <p class="t">Vyklepání</p>
           <p class="d">Odstranění volného prachu a hrubých nečistot.</p>
         </div>
         <div class="step">
-          <div class="n">2</div>
-          <p class="t">Čištění</p>
-          <p class="d">Odstranění znečištění a vyčištění na automatizované lince.</p>
+          <div class="n">3</div>
+          <p class="t">Odstranění silného znečištění</p>
+          <p class="d">Zaměříme se na výrazně znečištěná místa.</p>
         </div>
         <div class="step">
-          <div class="n">3</div>
-          <p class="t">Vysušení a zabalení</p>
-          <p class="d">Vysušíme, vysajeme a připravíme k předání / převozu.</p>
+          <div class="n">4</div>
+          <p class="t">Čištění v automatické lince</p>
+          <p class="d">Hlavní čištění proběhne na automatizované lince.</p>
+        </div>
+        <div class="step">
+          <div class="n">5</div>
+          <p class="t">Vysušení</p>
+          <p class="d">Koberec šetrně vysušíme.</p>
+        </div>
+        <div class="step">
+          <div class="n">6</div>
+          <p class="t">Vysátí</p>
+          <p class="d">Finální vysátí pro čistý povrch.</p>
+        </div>
+        <div class="step">
+          <div class="n">7</div>
+          <p class="t">Kontrola kvality</p>
+          <p class="d">Kontrola výsledku a dokončení zakázky.</p>
+        </div>
+        <div class="step">
+          <div class="n">8</div>
+          <p class="t">Zabalení a expedice</p>
+          <p class="d">Zabalíme a připravíme k předání / převozu.</p>
         </div>
       </div>
     </div>
@@ -543,6 +578,76 @@
     </div>
   </section>
 
+  <!-- POPTÁVKOVÝ FORMULÁŘ -->
+  <section id="poptavka">
+    <div class="wrap">
+      <h2 class="sectionTitle">Poptávkový formulář</h2>
+      <p class="muted">Pošlete nám poptávku. Ozveme se zpět co nejdřív.</p>
+
+      <div class="formGrid">
+        <div class="card formCard">
+          <!-- Formspree: sem dáš svůj endpoint (viz poznámka pod formulářem) -->
+          <form id="inquiryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <div class="formRow">
+              <div>
+                <label for="name">Jméno</label>
+                <input id="name" name="name" type="text" placeholder="Vaše jméno" required>
+              </div>
+              <div>
+                <label for="phone">Telefon</label>
+                <input id="phone" name="phone" type="tel" placeholder="+420 ..." required>
+              </div>
+            </div>
+
+            <div class="formRow" style="margin-top:12px;">
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="email@domena.cz" required>
+              </div>
+              <div>
+                <label for="service">Co poptáváte</label>
+                <select id="service" name="service" required>
+                  <option value="Čištění">Čištění</option>
+                  <option value="Impregnace">Impregnace</option>
+                  <option value="Obšívání">Obšívání</option>
+                  <option value="Kombinace">Kombinace</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label for="message">Zpráva</label>
+              <textarea id="message" name="message" placeholder="Napište rozměry, typ koberce, případně fotku pošlete do emailu."></textarea>
+            </div>
+
+            <!-- skrytý subject + kam má přijít email (Formspree to používá) -->
+            <input type="hidden" name="_subject" value="Poptávka z webu — Kobercový servis">
+            <input type="hidden" name="_replyto" value="">
+
+            <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <button class="btn btnPrimary" type="submit" id="sendBtn">Odeslat poptávku</button>
+              <span class="mini" id="formStatus"></span>
+            </div>
+
+            <div class="divider"></div>
+            <div class="mini">
+              Alternativně můžete psát přímo na <a href="mailto:info@kobercovyservis.cz" style="color:rgba(37,99,235,.95); font-weight:950;">info@kobercovyservis.cz</a>.
+            </div>
+          </form>
+        </div>
+
+        <div class="hint">
+          <strong>Jak to funguje (bez serveru):</strong><br>
+          GitHub Pages neumí posílat emaily sám. Formulář je nastavený na službu Formspree.<br><br>
+          1) Zaregistruješ se na Formspree a ověříš email <strong>info@kobercovyservis.cz</strong><br>
+          2) Vytvoříš form a dostaneš URL ve tvaru <strong>https://formspree.io/f/XXXXXX</strong><br>
+          3) V kódu nahradíš <strong>YOUR_FORM_ID</strong> tím ID (hotovo).<br><br>
+          Když chceš posílání přes vlastní hosting (PHP), řekni a dám ti `send.php`.
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="kontakt">
     <div class="wrap">
       <h2 class="sectionTitle">Kontakt</h2>
@@ -592,6 +697,53 @@
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // ====== FORM UX (lepší status, pořád bez serveru) ======
+    const form = document.getElementById('inquiryForm');
+    const formStatus = document.getElementById('formStatus');
+    const sendBtn = document.getElementById('sendBtn');
+
+    if(form){
+      form.addEventListener('submit', async (e) => {
+        // Pokud necháš Formspree URL prázdné, nechci aby to házelo chyby
+        const action = form.getAttribute('action') || '';
+        if(action.includes('YOUR_FORM_ID')){
+          e.preventDefault();
+          formStatus.textContent = 'Nejdřív doplň Formspree ID v action URL.';
+          formStatus.style.color = 'rgba(220,38,38,.95)';
+          return;
+        }
+
+        // Ajax submit (Formspree to umí)
+        e.preventDefault();
+        formStatus.textContent = 'Odesílám…';
+        formStatus.style.color = 'inherit';
+        sendBtn.disabled = true;
+
+        try{
+          const fd = new FormData(form);
+          const res = await fetch(action, {
+            method: 'POST',
+            body: fd,
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if(res.ok){
+            form.reset();
+            formStatus.textContent = 'Hotovo. Poptávka byla odeslána.';
+            formStatus.style.color = 'rgba(22,163,74,.95)';
+          }else{
+            formStatus.textContent = 'Nepovedlo se odeslat. Zkuste to znovu nebo napište na email.';
+            formStatus.style.color = 'rgba(220,38,38,.95)';
+          }
+        }catch(err){
+          formStatus.textContent = 'Chyba připojení. Zkuste to znovu nebo napište na email.';
+          formStatus.style.color = 'rgba(220,38,38,.95)';
+        }finally{
+          sendBtn.disabled = false;
+        }
+      });
+    }
 
     // ====== CALC (AUTO + MULTI) ======
     const PRICE_CLEAN_PER_M2 = 300;
@@ -882,13 +1034,12 @@
 
     addRugBtn.addEventListener('click', addRug);
     resetRugsBtn.addEventListener('click', resetRugs);
-
     resetRugs();
 
     // Map zatím neaktivní
-    document.getElementById('geoBtn').addEventListener('click', () => alert('Mapa se připravuje (čeká na Google Maps API).'));
-    document.getElementById('searchAddrBtn').addEventListener('click', () => alert('Mapa se připravuje.'));
-    document.getElementById('reloadBtn').addEventListener('click', () => alert('Mapa se připravuje.'));
+    document.getElementById('geoBtn')?.addEventListener('click', () => alert('Mapa se připravuje (čeká na Google Maps API).'));
+    document.getElementById('searchAddrBtn')?.addEventListener('click', () => alert('Mapa se připravuje.'));
+    document.getElementById('reloadBtn')?.addEventListener('click', () => alert('Mapa se připravuje.'));
   </script>
 
 </body>
