@@ -2,6 +2,82 @@
 (() => {
   const CFG = window.APP_CONFIG || {};
 
+  // ===== Helpers =====
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function cleanStr(s){ return String(s ?? "").trim(); }
+
+  // CSV parser (jednoduchý + zvládá uvozovky)
+  function parseCSV(text){
+    const rows = [];
+    let row = [];
+    let cur = "";
+    let inQuotes = false;
+
+    for(let i=0;i<text.length;i++){
+      const c = text[i];
+
+      if(c === '"'){
+        // "" uvnitř uvozovek = escape "
+        if(inQuotes && text[i+1] === '"'){ cur += '"'; i++; }
+        else inQuotes = !inQuotes;
+        continue;
+      }
+
+      if(!inQuotes && (c === ",")){
+        row.push(cur);
+        cur = "";
+        continue;
+      }
+
+      if(!inQuotes && (c === "\n")){
+        row.push(cur);
+        rows.push(row);
+        row = [];
+        cur = "";
+        continue;
+      }
+
+      if(c !== "\r") cur += c;
+    }
+
+    // poslední buňka
+    row.push(cur);
+    rows.push(row);
+
+    // odstranění prázdných řádků na konci
+    while(rows.length && rows[rows.length-1].every(x => String(x).trim() === "")) rows.pop();
+
+    return rows;
+  }
+
+  function csvToObjects(csvText){
+    const rows = parseCSV(csvText);
+    if(!rows.length) return [];
+    const header = rows[0].map(h => cleanStr(h));
+    const out = [];
+
+    for(let i=1;i<rows.length;i++){
+      const r = rows[i];
+      const obj = {};
+      header.forEach((h, idx) => obj[h] = r[idx] ?? "");
+      out.push(obj);
+    }
+    return out;
+  }
+
+  function toNum(x){
+    const n = Number(String(x ?? "").replace(",", "."));
+    return Number.isFinite(n) ? n : null;
+  }
+
   // ===== Footer year =====
   const y = document.getElementById("y");
   if (y) y.textContent = new Date().getFullYear();
@@ -19,7 +95,6 @@
       './assets/klepac.png'
     ];
 
-    // preload
     frames.forEach(src => { const i = new Image(); i.src = src; });
 
     let i = 0;
@@ -36,18 +111,17 @@
     }, stepMs);
   })();
 
-  // ===== FORM =====
+  // ===== FORM (Formspree) =====
   const form = document.getElementById('inquiryForm');
   const formStatus = document.getElementById('formStatus');
   const sendBtn = document.getElementById('sendBtn');
 
   if(form){
-    // set action from config
-    const action = (CFG.FORMSPREE_ACTION || '').trim();
+    const action = cleanStr(CFG.FORMSPREE_ACTION);
     if(action) form.setAttribute('action', action);
 
     form.addEventListener('submit', async (e) => {
-      const actionUrl = (form.getAttribute('action') || '').trim();
+      const actionUrl = cleanStr(form.getAttribute('action'));
 
       if(!actionUrl || actionUrl.includes('YOUR_FORM_ID')){
         e.preventDefault();
@@ -384,21 +458,6 @@
   resetRugsBtn?.addEventListener('click', resetRugs);
   if (rugsEl) resetRugs();
 
-  // ===== Map placeholder (zatím bez API) =====
-  const mapStatus = document.getElementById('mapStatus');
-  function mapNotReady(){
-    const key = (CFG.GOOGLE_MAPS_API_KEY || '').trim();
-    const dataUrl = (CFG.PLACES_DATA_URL || '').trim();
-
-    if(mapStatus){
-      if(!key || key.includes('YOUR_GOOGLE_MAPS_API_KEY')){
-        mapStatus.textContent = 'Mapa zatím není aktivní — doplň Google Maps API key v config.js.';
-        return;
-      }
-      mapStatus.textContent = `Mapa zatím není napojená (chybí implementace). Data: ${dataUrl || 'nenastaveno'}`;
-    }
-  }
-  document.getElementById('geoBtn')?.addEventListener('click', mapNotReady);
-  document.getElementById('searchAddrBtn')?.addEventListener('click', mapNotReady);
-  document.getElementById('reloadBtn')?.addEventListener('click', mapNotReady);
-})();
+  // ====== PLACES: load from Google Sheets CSV and render list ======
+  const placesListEl = document.getElementById('placesList');
+  const mapStatusEl
