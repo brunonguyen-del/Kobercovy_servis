@@ -8,6 +8,7 @@ window.APP_CONFIG = {
 
   // Data pro sběrná místa (CSV/JSON url) – zatím placeholder
   PLACES_DATA_URL: "https://docs.google.com/spreadsheets/d/1CJYobC4NWdUv03alqpUYyte--Fw-tiRilqZuYzE-87g/export?format=csv",
+,
 ",
 
   // Ceník
@@ -15,5 +16,6 @@ window.APP_CONFIG = {
   PRICE_EDGE_PER_M: 99,
   PRICE_IMP_PER_M2: 40
 };
+
 
 
