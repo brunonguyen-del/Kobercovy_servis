@@ -21,18 +21,33 @@
 
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
+
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-      background:
-        radial-gradient(900px 600px at 15% -10%, rgba(37,99,235,.08), transparent 55%),
-        radial-gradient(900px 600px at 85% 0%, rgba(96,165,250,.10), transparent 55%),
-        var(--bg);
+      background: var(--bg);
       color:var(--text);
     }
+
+    /* Jemné pozadí jen pro horní část webu */
+    body::before{
+      content:"";
+      position:fixed;
+      left:0; top:0; right:0;
+      height:1200px; /* uprav klidně: 900–1600px podle oka */
+      background:
+        radial-gradient(900px 600px at 15% -10%, rgba(37,99,235,.08), transparent 55%),
+        radial-gradient(900px 600px at 85% 0%, rgba(96,165,250,.10), transparent 55%);
+      pointer-events:none;
+      z-index:-1;
+    }
+
     a{color:inherit; text-decoration:none}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
-    section{padding:80px 0; scroll-margin-top:120px;}
+
+    /* anchor offset */
+    section{padding:80px 0; scroll-margin-top:90px;}
+
     .sectionTitle{margin:0 0 10px; font-size:30px; letter-spacing:-.3px}
     .muted{color:var(--muted); line-height:1.55}
     .mini{font-size:13px; color:var(--muted)}
@@ -44,7 +59,7 @@
       box-shadow:var(--shadow);
     }
 
-    /* NAV – menší hlavička */
+    /* NAV – Varianta A: nízká lišta, logo vyčnívá */
     .nav{
       position:fixed; inset:0 0 auto 0; z-index:50;
       background:rgba(255,255,255,.72);
@@ -54,21 +69,39 @@
     @supports not ((backdrop-filter: blur(10px))) {
       .nav{background:rgba(255,255,255,.92);}
     }
+
     .navin{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:4px 0;
-    }
-    .brand{display:flex; align-items:center; gap:10px}
-    .logoNav{
-      height:110px;
-      width:auto;
-      display:block;
+      padding:2px 0;
+      min-height:64px;
     }
 
-    .menu{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+    .brand{
+      position:relative;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .logoNav{
+      height:110px; /* logo velké */
+      width:auto;
+      display:block;
+      position:relative;
+      top:18px;     /* vyčnívá dolů */
+    }
+
+    .menu{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center
+    }
+
     .menu a{
       color:var(--muted);
       padding:8px 10px;
@@ -93,7 +126,7 @@
       min-height:100vh;
       display:flex;
       align-items:center;
-      padding-top:110px;
+      padding-top:90px; /* sladěné s scroll-margin-top */
       position:relative;
       overflow:hidden;
       background: url("./assets/poster.jpg") center/cover no-repeat;
@@ -150,7 +183,7 @@
     }
     .pill strong{color:var(--text)}
 
-    /* Slideshow obrázek – jemný fade */
+    /* Slideshow obrázek – fade */
     .machineImg{
       width:100%;
       height:auto;
@@ -163,25 +196,11 @@
     }
     .machineImg.isFading{opacity:0}
 
-    /* Pozadí sekcí (mimo hero a footer) */
-    .photoSection{position:relative; overflow:hidden;}
-    .photoSection::before{
-      content:"";
-      position:absolute; inset:0;
-      background-image: var(--bgimg);
-      background-size:cover;
-      background-position:center;
-      filter: saturate(.35) brightness(1.08) contrast(.9) blur(2px);
-      transform: scale(1.05);
-      z-index:0;
-    }
-    .photoSection::after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(rgba(255,255,255,.82), rgba(255,255,255,.94));
-      z-index:1;
-    }
-    .photoSection > .wrap{position:relative; z-index:2}
+    /* Vypnutí fotopozadí sekcí (zbytek webu je bílý) */
+    .photoSection{position:relative;}
+    .photoSection::before,
+    .photoSection::after{content:none;}
+    .photoSection{background:transparent;}
 
     /* GRID */
     .grid3{display:grid; grid-template-columns: repeat(3,1fr); gap:14px}
@@ -352,17 +371,16 @@
       .row{grid-template-columns:1fr}
       .formGrid{grid-template-columns:1fr}
       .formRow{grid-template-columns:1fr}
-      .logoNav{height:64px}
-      .hero{padding-top:95px}
-      section{scroll-margin-top:95px;}
+
+      /* Na mobilu logo nevyčnívá (jinak překáží) */
+      .logoNav{height:64px; top:0;}
+      .hero{padding-top:90px;}
+      section{scroll-margin-top:90px;}
       .machineImg{max-width:620px; margin:0 auto;}
     }
+
     @media (max-width: 720px){
       .steps{grid-template-columns: 1fr;}
-    }
-    @media (max-width: 700px){
-      .logoNav{height:58px}
-      .hero{padding-top:90px}
     }
   </style>
 </head>
@@ -434,7 +452,7 @@
   </section>
 
   <!-- SLUŽBY -->
-  <section id="sluzby" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
+  <section id="sluzby" class="photoSection">
     <div class="wrap">
       <h2 class="sectionTitle">Služby</h2>
 
@@ -503,7 +521,7 @@
   </section>
 
   <!-- CENÍK -->
-  <section id="cenik" class="photoSection" style="--bgimg:url('./assets/koberec2.jpg')">
+  <section id="cenik" class="photoSection">
     <div class="wrap">
       <h2 class="sectionTitle">Ceník a kalkulačka</h2>
       <p class="muted">
@@ -557,7 +575,7 @@
   </section>
 
   <!-- SBĚRNÁ MÍSTA -->
-  <section id="sberna" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
+  <section id="sberna" class="photoSection">
     <div class="wrap">
       <h2 class="sectionTitle">Sběrná místa</h2>
       <p class="muted">Mapa a vyhledávání budou plně funkční po dopojení Google Maps API.</p>
@@ -599,7 +617,7 @@
   </section>
 
   <!-- POPTÁVKA -->
-  <section id="poptavka" class="photoSection" style="--bgimg:url('./assets/koberec2.jpg')">
+  <section id="poptavka" class="photoSection">
     <div class="wrap">
       <h2 class="sectionTitle">Poptávkový formulář</h2>
       <p class="muted">Pošlete nám poptávku. Ozveme se zpět co nejdřív.</p>
@@ -666,7 +684,7 @@
   </section>
 
   <!-- KONTAKT -->
-  <section id="kontakt" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
+  <section id="kontakt" class="photoSection">
     <div class="wrap">
       <h2 class="sectionTitle">Kontakt</h2>
       <p class="muted">Zavolejte nebo napište. Domluvíme předání a termín.</p>
@@ -717,7 +735,7 @@
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // ===== HERO SLIDESHOW (vyladěný) =====
+    // ===== HERO SLIDESHOW =====
     (function(){
       const imgEl = document.getElementById('heroMachine');
       if(!imgEl) return;
@@ -738,7 +756,6 @@
 
       setInterval(() => {
         imgEl.classList.add('isFading');
-
         setTimeout(() => {
           i = (i + 1) % frames.length;
           imgEl.src = frames[i];
