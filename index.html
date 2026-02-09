@@ -44,7 +44,7 @@
       box-shadow:var(--shadow);
     }
 
-    /* NAV (zmenšeno – logo velké, ale header nízký) */
+    /* NAV – menší hlavička */
     .nav{
       position:fixed; inset:0 0 auto 0; z-index:50;
       background:rgba(255,255,255,.72);
@@ -56,11 +56,11 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:6px 0; /* bylo 12px */
+      padding:4px 0; /* menší než dřív */
     }
     .brand{display:flex; align-items:center; gap:10px}
     .logoNav{
-      height:110px; /* velké, ale už ne “přes půl obrazovky” */
+      height:78px; /* menší hlavička, ale logo pořád výrazné */
       width:auto;
       display:block;
     }
@@ -87,8 +87,7 @@
       min-height:100vh;
       display:flex;
       align-items:center;
-      /* menší než dřív – díky menší hlavičce */
-      padding-top:140px;
+      padding-top:110px; /* upraveno kvůli menší hlavičce */
       position:relative;
       overflow:hidden;
       background: url("./assets/poster.jpg") center/cover no-repeat;
@@ -145,16 +144,20 @@
     }
     .pill strong{color:var(--text)}
 
-    /* HERO IMAGE (linka) – čistě jen obrázek */
+    /* Slideshow obrázek – jemný fade */
     .machineImg{
       width:100%;
       height:auto;
       display:block;
       background:transparent;
       filter: drop-shadow(0 18px 45px rgba(15,23,42,.14));
+      opacity:1;
+      transition: opacity .35s ease;
+      will-change: opacity;
     }
+    .machineImg.isFading{opacity:0}
 
-    /* PHOTO BACKGROUND SECTIONS */
+    /* Pozadí sekcí (mimo hero a footer) */
     .photoSection{position:relative; overflow:hidden;}
     .photoSection::before{
       content:"";
@@ -162,14 +165,14 @@
       background-image: var(--bgimg);
       background-size:cover;
       background-position:center;
-      filter: saturate(.35) brightness(1.10) contrast(.9) blur(2px);
+      filter: saturate(.35) brightness(1.08) contrast(.9) blur(2px);
       transform: scale(1.05);
       z-index:0;
     }
     .photoSection::after{
       content:"";
       position:absolute; inset:0;
-      background: linear-gradient(rgba(255,255,255,.80), rgba(255,255,255,.92));
+      background: linear-gradient(rgba(255,255,255,.82), rgba(255,255,255,.94));
       z-index:1;
     }
     .photoSection > .wrap{position:relative; z-index:2}
@@ -180,7 +183,7 @@
     .box h3{margin:0 0 8px; font-size:16px}
     .box p{margin:0; color:var(--muted); font-size:14px}
 
-    /* Steps – 8 kroků */
+    /* Steps */
     .steps{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
@@ -301,13 +304,6 @@
     .listHead{padding:12px 12px; border-bottom:1px solid var(--line); color:var(--muted); font-size:13px}
     .cards{padding:10px; display:grid; gap:10px; overflow:auto}
 
-    footer{
-      padding:32px 0 40px;
-      color:var(--muted);
-      border-top:1px solid var(--line);
-      background:rgba(255,255,255,.65);
-    }
-
     /* Form */
     .formGrid{
       display:grid;
@@ -327,6 +323,13 @@
       line-height:1.55;
     }
 
+    footer{
+      padding:32px 0 40px;
+      color:var(--muted);
+      border-top:1px solid var(--line);
+      background:rgba(255,255,255,.65);
+    }
+
     @media (max-width: 920px){
       h1{font-size:38px}
       .heroGrid{grid-template-columns:1fr}
@@ -340,13 +343,13 @@
       .row{grid-template-columns:1fr}
       .formGrid{grid-template-columns:1fr}
       .formRow{grid-template-columns:1fr}
-      .logoNav{height:86px}
-      .hero{padding-top:120px}
+      .logoNav{height:64px}
+      .hero{padding-top:95px}
       .machineImg{max-width:620px; margin:0 auto;}
     }
     @media (max-width: 700px){
-      .logoNav{height:74px}
-      .hero{padding-top:110px}
+      .logoNav{height:58px}
+      .hero{padding-top:90px}
     }
   </style>
 </head>
@@ -370,6 +373,7 @@
     </div>
   </div>
 
+  <!-- HERO (bez photo pozadí navíc) -->
   <section id="uvod" class="hero">
     <div class="heroOverlay" aria-hidden="true"></div>
 
@@ -399,7 +403,7 @@
           <div class="card" style="padding:16px; background:rgba(255,255,255,.82); box-shadow:none;">
             <div style="font-weight:950; margin-bottom:6px;">Základní čištění zahrnuje</div>
             <div class="muted" style="font-size:14px;">
-              vyklepání • odstranění znečištění • vyčištění • vysušení • vysátí • zabalení
+              zaměření • evidence • vyklepání • odstranění znečištění • čištění • sušení • vysátí • zabalení
             </div>
             <div class="mini" style="margin-top:8px;">
               Impregnace a obšívání jsou volitelné a počítají se v kalkulačce.
@@ -407,14 +411,16 @@
           </div>
         </div>
 
+        <!-- SLIDESHOW -->
         <div>
-          <img class="machineImg" src="./assets/linka.png" alt="Automatizovaná čistící linka">
+          <img id="heroMachine" class="machineImg" src="./assets/linka.png" alt="Automatizovaná čistící linka">
         </div>
 
       </div>
     </div>
   </section>
 
+  <!-- SLUŽBY (pozadí) -->
   <section id="sluzby" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Služby</h2>
@@ -484,6 +490,7 @@
     </div>
   </section>
 
+  <!-- CENÍK (pozadí) -->
   <section id="cenik" class="photoSection" style="--bgimg:url('./assets/koberec2.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Ceník a kalkulačka</h2>
@@ -537,7 +544,8 @@
     </div>
   </section>
 
-  <section id="sberna">
+  <!-- SBĚRNÁ MÍSTA (pozadí doplněno) -->
+  <section id="sberna" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Sběrná místa</h2>
       <p class="muted">Mapa a vyhledávání budou plně funkční po dopojení Google Maps API.</p>
@@ -578,15 +586,15 @@
     </div>
   </section>
 
-  <!-- POPTÁVKOVÝ FORMULÁŘ -->
-  <section id="poptavka">
+  <!-- POPTÁVKA (pozadí doplněno) -->
+  <section id="poptavka" class="photoSection" style="--bgimg:url('./assets/koberec2.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Poptávkový formulář</h2>
       <p class="muted">Pošlete nám poptávku. Ozveme se zpět co nejdřív.</p>
 
       <div class="formGrid">
         <div class="card formCard">
-          <!-- Formspree: sem dáš svůj endpoint (viz poznámka pod formulářem) -->
+          <!-- Formspree: sem dáš svůj endpoint -->
           <form id="inquiryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
             <div class="formRow">
               <div>
@@ -620,9 +628,7 @@
               <textarea id="message" name="message" placeholder="Napište rozměry, typ koberce, případně fotku pošlete do emailu."></textarea>
             </div>
 
-            <!-- skrytý subject + kam má přijít email (Formspree to používá) -->
             <input type="hidden" name="_subject" value="Poptávka z webu — Kobercový servis">
-            <input type="hidden" name="_replyto" value="">
 
             <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
               <button class="btn btnPrimary" type="submit" id="sendBtn">Odeslat poptávku</button>
@@ -631,24 +637,25 @@
 
             <div class="divider"></div>
             <div class="mini">
-              Alternativně můžete psát přímo na <a href="mailto:info@kobercovyservis.cz" style="color:rgba(37,99,235,.95); font-weight:950;">info@kobercovyservis.cz</a>.
+              Alternativně můžete psát přímo na
+              <a href="mailto:info@kobercovyservis.cz" style="color:rgba(37,99,235,.95); font-weight:950;">info@kobercovyservis.cz</a>.
             </div>
           </form>
         </div>
 
         <div class="hint">
-          <strong>Jak to funguje (bez serveru):</strong><br>
-          GitHub Pages neumí posílat emaily sám. Formulář je nastavený na službu Formspree.<br><br>
-          1) Zaregistruješ se na Formspree a ověříš email <strong>info@kobercovyservis.cz</strong><br>
-          2) Vytvoříš form a dostaneš URL ve tvaru <strong>https://formspree.io/f/XXXXXX</strong><br>
-          3) V kódu nahradíš <strong>YOUR_FORM_ID</strong> tím ID (hotovo).<br><br>
-          Když chceš posílání přes vlastní hosting (PHP), řekni a dám ti `send.php`.
+          <strong>Rychlá realita:</strong><br>
+          GitHub Pages neumí posílat emaily sám. Tohle běží přes Formspree (nebo podobnou službu).<br><br>
+          Jakmile budeš mít Formspree URL, vyměníš jen:<br>
+          <strong>https://formspree.io/f/YOUR_FORM_ID</strong><br>
+          za tvoje reálné URL.
         </div>
       </div>
     </div>
   </section>
 
-  <section id="kontakt">
+  <!-- KONTAKT (pozadí doplněno) -->
+  <section id="kontakt" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Kontakt</h2>
       <p class="muted">Zavolejte nebo napište. Domluvíme předání a termín.</p>
@@ -691,6 +698,7 @@
     </div>
   </section>
 
+  <!-- FOOTER (bez photo pozadí) -->
   <footer>
     <div class="wrap">© <span id="y"></span> Kobercový servis, s. r. o.</div>
   </footer>
@@ -698,14 +706,44 @@
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // ====== FORM UX (lepší status, pořád bez serveru) ======
+    // ===== HERO SLIDESHOW (2s) =====
+    (function(){
+      const imgEl = document.getElementById('heroMachine');
+      if(!imgEl) return;
+
+      const frames = [
+        './assets/linka.png',
+        './assets/centrifuga.png',
+        './assets/susicka.png',
+        './assets/vysavac.png',
+        './assets/klepac.png'
+      ];
+
+      // preload (aby to necukalo)
+      frames.forEach(src => { const i = new Image(); i.src = src; });
+
+      let i = 0;
+      const stepMs = 2000;
+      const fadeMs = 350;
+
+      setInterval(() => {
+        imgEl.classList.add('isFading');
+
+        setTimeout(() => {
+          i = (i + 1) % frames.length;
+          imgEl.src = frames[i];
+          imgEl.classList.remove('isFading');
+        }, fadeMs);
+      }, stepMs);
+    })();
+
+    // ===== FORM UX =====
     const form = document.getElementById('inquiryForm');
     const formStatus = document.getElementById('formStatus');
     const sendBtn = document.getElementById('sendBtn');
 
     if(form){
       form.addEventListener('submit', async (e) => {
-        // Pokud necháš Formspree URL prázdné, nechci aby to házelo chyby
         const action = form.getAttribute('action') || '';
         if(action.includes('YOUR_FORM_ID')){
           e.preventDefault();
@@ -714,7 +752,6 @@
           return;
         }
 
-        // Ajax submit (Formspree to umí)
         e.preventDefault();
         formStatus.textContent = 'Odesílám…';
         formStatus.style.color = 'inherit';
@@ -1032,8 +1069,8 @@
       computeAll();
     });
 
-    addRugBtn.addEventListener('click', addRug);
-    resetRugsBtn.addEventListener('click', resetRugs);
+    addRugBtn?.addEventListener('click', addRug);
+    resetRugsBtn?.addEventListener('click', resetRugs);
     resetRugs();
 
     // Map zatím neaktivní
