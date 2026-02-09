@@ -21,35 +21,16 @@
 
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
       background: var(--bg);
       color:var(--text);
-      position:relative;
-      overflow-x:hidden;
-    }
-
-    /* Jemné pozadí jen pro horní část webu (až cca půl webu) */
-    body::before{
-      content:"";
-      position:absolute;
-      left:0; top:0; right:0;
-      height:1600px; /* tady prodlužuješ “kam až” to má sahat */
-      background:
-        radial-gradient(900px 600px at 15% -10%, rgba(37,99,235,.10), transparent 55%),
-        radial-gradient(900px 600px at 85% 0%, rgba(96,165,250,.12), transparent 55%);
-      pointer-events:none;
-      z-index:0;
     }
 
     a{color:inherit; text-decoration:none}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
-
-    /* anchor offset */
-    section{padding:80px 0; scroll-margin-top:120px;}
-
+    section{padding:80px 0; scroll-margin-top:110px;}
     .sectionTitle{margin:0 0 10px; font-size:30px; letter-spacing:-.3px}
     .muted{color:var(--muted); line-height:1.55}
     .mini{font-size:13px; color:var(--muted)}
@@ -61,7 +42,24 @@
       box-shadow:var(--shadow);
     }
 
-    /* NAV – PŮVODNÍ NASTAVENÍ */
+    /* ===== TOP BACKDROP WRAPPER (hero + část webu) ===== */
+    .topBackdrop{
+      position:relative;
+      overflow:hidden;
+    }
+    .topBackdrop::before{
+      content:"";
+      position:absolute; inset:0;
+      /* tohle je to “pozadí z prvni sekce natažené dál” */
+      background:
+        radial-gradient(900px 600px at 15% -10%, rgba(37,99,235,.10), transparent 55%),
+        radial-gradient(900px 600px at 85% 0%, rgba(96,165,250,.12), transparent 55%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .topBackdrop > *{ position:relative; z-index:1; }
+
+    /* NAV */
     .nav{
       position:fixed; inset:0 0 auto 0; z-index:50;
       background:rgba(255,255,255,.72);
@@ -76,14 +74,15 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:4px 0; /* původní */
+      padding:4px 0;
     }
     .brand{display:flex; align-items:center; gap:10px}
+
+    /* LOGO - zmenšeno o 20% (110px -> 88px) */
     .logoNav{
-      height:110px; /* původní */
+      height:88px;
       width:auto;
       display:block;
-      position:static; /* žádný vyčnívání */
     }
 
     .menu{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
@@ -111,18 +110,17 @@
       min-height:100vh;
       display:flex;
       align-items:center;
-      padding-top:110px; /* původní */
+      padding-top:100px; /* menší kvůli menšímu logu */
       position:relative;
       overflow:hidden;
       background: url("./assets/poster.jpg") center/cover no-repeat;
-      z-index:1; /* nad body::before */
     }
     .heroOverlay{
       position:absolute; inset:0;
-      /* DŮLEŽITÉ: už to není “bílá stěna”, jen lehká mlha */
+      /* DŮLEŽITÉ: žádný “bílý uříznutí” – jen lehká mlha */
       background:
         radial-gradient(900px 600px at 15% 20%, rgba(37,99,235,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.60) 55%, rgba(255,255,255,.70));
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.40) 60%, rgba(255,255,255,.55));
     }
     .heroContent{position:relative; z-index:2}
     .heroGrid{
@@ -183,8 +181,9 @@
     }
     .machineImg.isFading{opacity:0}
 
-    /* Sekce čistě bílé (žádné fotky na pozadí) */
-    .photoSection{position:relative; z-index:1;} /* nad body::before */
+    /* SEKCE */
+    .photoSection{background:transparent;} /* aby prosvítal topBackdrop gradient */
+    .whiteSection{background:#fff;}        /* od tohoto místa už čistě bílé */
 
     /* GRID */
     .grid3{display:grid; grid-template-columns: repeat(3,1fr); gap:14px}
@@ -337,12 +336,6 @@
       color:var(--muted);
       border-top:1px solid var(--line);
       background:rgba(255,255,255,.65);
-      position:relative;
-      z-index:1;
-    }
-
-    @media (max-width: 1100px){
-      .steps{grid-template-columns: repeat(2, 1fr);}
     }
 
     @media (max-width: 920px){
@@ -358,11 +351,10 @@
       .row{grid-template-columns:1fr}
       .formGrid{grid-template-columns:1fr}
       .formRow{grid-template-columns:1fr}
-      .logoNav{height:64px}
-      .hero{padding-top:95px}
-      section{scroll-margin-top:95px;}
+      .logoNav{height:56px}
+      .hero{padding-top:90px}
+      section{scroll-margin-top:90px;}
       .machineImg{max-width:620px; margin:0 auto;}
-      body::before{height:1400px;}
     }
   </style>
 </head>
@@ -386,146 +378,147 @@
     </div>
   </div>
 
-  <!-- HERO -->
-  <section id="uvod" class="hero">
-    <div class="heroOverlay" aria-hidden="true"></div>
+  <!-- TOP BACKDROP ZÓNA: hero + služby + ceník (tady to fakt neskončí v hero) -->
+  <div class="topBackdrop">
 
-    <div class="wrap heroContent">
-      <div class="heroGrid">
+    <section id="uvod" class="hero">
+      <div class="heroOverlay" aria-hidden="true"></div>
 
-        <div>
-          <h1>Automatizované čištění<br/>kusových koberců</h1>
-          <p class="lead">
-            Čistíme koberce na automatizované lince. Spočítej cenu hned teď, klidně i pro víc koberců,
-            a najdi nejbližší sběrné místo.
-          </p>
+      <div class="wrap heroContent">
+        <div class="heroGrid">
 
-          <div class="heroBtns">
-            <a class="btn btnPrimary" href="#cenik">Ceník služeb</a>
-            <a class="btn" href="#sberna">Sběrná místa</a>
-          </div>
-
-          <div class="pillRow">
-            <span class="pill"><strong>Čištění</strong> 300 Kč/m²</span>
-            <span class="pill"><strong>Obšívání</strong> 99 Kč/m</span>
-            <span class="pill"><strong>Impregnace</strong> 40 Kč/m²</span>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="card" style="padding:16px; background:rgba(255,255,255,.82); box-shadow:none;">
-            <div style="font-weight:950; margin-bottom:6px;">Základní čištění zahrnuje</div>
-            <div class="muted" style="font-size:14px;">
-              zaměření • evidence • vyklepání • odstranění znečištění • čištění • sušení • vysátí • zabalení
-            </div>
-            <div class="mini" style="margin-top:8px;">
-              Impregnace a obšívání jsou volitelné a počítají se v kalkulačce.
-            </div>
-          </div>
-        </div>
-
-        <!-- SLIDESHOW -->
-        <div>
-          <img id="heroMachine" class="machineImg" src="./assets/linka.png" alt="Automatizovaná čistící linka">
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- SLUŽBY -->
-  <section id="sluzby" class="photoSection">
-    <div class="wrap">
-      <h2 class="sectionTitle">Služby</h2>
-
-      <div class="grid3" style="margin-top:14px;">
-        <div class="card box">
-          <h3>Čištění koberců</h3>
-          <p>Kusové koberce. Automatizovaná linka.</p>
-        </div>
-        <div class="card box">
-          <h3>Impregnace koberců</h3>
-          <p>Volitelná ochrana vláken proti dalšímu znečištění.</p>
-        </div>
-        <div class="card box">
-          <h3>Obšívání koberců</h3>
-          <p>Volitelné zakončení / oprava okrajů (dle domluvy).</p>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <h3 style="margin:0; font-size:16px; letter-spacing:-.1px;">Jak probíhá čištění</h3>
-
-      <div class="steps">
-        <div class="step"><div class="n">1</div><p class="t">Zaměření a evidence</p><p class="d">Změříme, zaevidujeme a přiřadíme zakázku.</p></div>
-        <div class="step"><div class="n">2</div><p class="t">Vyklepání</p><p class="d">Odstranění volného prachu a hrubých nečistot.</p></div>
-        <div class="step"><div class="n">3</div><p class="t">Odstranění silného znečištění</p><p class="d">Zaměříme se na výrazně znečištěná místa.</p></div>
-        <div class="step"><div class="n">4</div><p class="t">Čištění v automatické lince</p><p class="d">Hlavní čištění proběhne na automatizované lince.</p></div>
-        <div class="step"><div class="n">5</div><p class="t">Vysušení</p><p class="d">Koberec šetrně vysušíme.</p></div>
-        <div class="step"><div class="n">6</div><p class="t">Vysátí</p><p class="d">Finální vysátí pro čistý povrch.</p></div>
-        <div class="step"><div class="n">7</div><p class="t">Kontrola kvality</p><p class="d">Kontrola výsledku a dokončení zakázky.</p></div>
-        <div class="step"><div class="n">8</div><p class="t">Zabalení a expedice</p><p class="d">Zabalíme a připravíme k předání / převozu.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CENÍK -->
-  <section id="cenik" class="photoSection">
-    <div class="wrap">
-      <h2 class="sectionTitle">Ceník a kalkulačka</h2>
-      <p class="muted">
-        Zadej rozměry v centimetrech. Kalkulačka počítá automaticky. Můžeš přidat víc koberců.
-      </p>
-
-      <div class="card" style="margin-top:14px; overflow:hidden;">
-        <div style="padding:16px; border-bottom:1px solid var(--line); display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
           <div>
-            <div style="font-weight:950; letter-spacing:-.2px;">Kalkulačka (více koberců)</div>
-            <div class="mini">Čištění 300 Kč/m² • Obšívání 99 Kč/m • Impregnace 40 Kč/m²</div>
-          </div>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="btn btnPrimary" id="addRugBtn" type="button">+ Přidat koberec</button>
-            <button class="btn" id="resetRugsBtn" type="button">Reset</button>
-          </div>
-        </div>
+            <h1>Automatizované čištění<br/>kusových koberců</h1>
+            <p class="lead">
+              Čistíme koberce na automatizované lince. Spočítej cenu hned teď, klidně i pro víc koberců,
+              a najdi nejbližší sběrné místo.
+            </p>
 
-        <div style="padding:16px;">
-          <div id="rugs"></div>
+            <div class="heroBtns">
+              <a class="btn btnPrimary" href="#cenik">Ceník služeb</a>
+              <a class="btn" href="#sberna">Sběrná místa</a>
+            </div>
 
-          <div class="divider"></div>
+            <div class="pillRow">
+              <span class="pill"><strong>Čištění</strong> 300 Kč/m²</span>
+              <span class="pill"><strong>Obšívání</strong> 99 Kč/m</span>
+              <span class="pill"><strong>Impregnace</strong> 40 Kč/m²</span>
+            </div>
 
-          <div class="card" style="box-shadow:none; background:rgba(255,255,255,.78); border-radius:16px;">
-            <div style="padding:16px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
-              <div>
-                <div class="mini">Součet plochy</div>
-                <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumArea">— m²</div>
-                <div class="mini">Součet obvodů</div>
-                <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumPerim">— m</div>
+            <div class="divider"></div>
+
+            <div class="card" style="padding:16px; background:rgba(255,255,255,.82); box-shadow:none;">
+              <div style="font-weight:950; margin-bottom:6px;">Základní čištění zahrnuje</div>
+              <div class="muted" style="font-size:14px;">
+                zaměření • evidence • vyklepání • odstranění znečištění • čištění • sušení • vysátí • zabalení
               </div>
-
-              <div>
-                <div class="mini">Rozpis</div>
-                <div class="mini" id="sumBreakdown" style="margin-top:6px; line-height:1.6;">—</div>
-
-                <div class="divider"></div>
-
-                <div class="mini">Celkem orientačně</div>
-                <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumTotal">— Kč</div>
+              <div class="mini" style="margin-top:8px;">
+                Impregnace a obšívání jsou volitelné a počítají se v kalkulačce.
               </div>
             </div>
           </div>
 
-          <div class="mini" style="margin-top:12px;">
-            Pozn.: cena je orientační. U některých materiálů a znečištění se může lišit.
+          <div>
+            <img id="heroMachine" class="machineImg" src="./assets/linka.png" alt="Automatizovaná čistící linka">
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="sluzby" class="photoSection">
+      <div class="wrap">
+        <h2 class="sectionTitle">Služby</h2>
+
+        <div class="grid3" style="margin-top:14px;">
+          <div class="card box">
+            <h3>Čištění koberců</h3>
+            <p>Kusové koberce. Automatizovaná linka.</p>
+          </div>
+          <div class="card box">
+            <h3>Impregnace koberců</h3>
+            <p>Volitelná ochrana vláken proti dalšímu znečištění.</p>
+          </div>
+          <div class="card box">
+            <h3>Obšívání koberců</h3>
+            <p>Volitelné zakončení / oprava okrajů (dle domluvy).</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="margin:0; font-size:16px; letter-spacing:-.1px;">Jak probíhá čištění</h3>
+
+        <div class="steps">
+          <div class="step"><div class="n">1</div><p class="t">Zaměření a evidence</p><p class="d">Změříme, zaevidujeme a přiřadíme zakázku.</p></div>
+          <div class="step"><div class="n">2</div><p class="t">Vyklepání</p><p class="d">Odstranění volného prachu a hrubých nečistot.</p></div>
+          <div class="step"><div class="n">3</div><p class="t">Odstranění silného znečištění</p><p class="d">Zaměříme se na výrazně znečištěná místa.</p></div>
+          <div class="step"><div class="n">4</div><p class="t">Čištění v automatické lince</p><p class="d">Hlavní čištění proběhne na automatizované lince.</p></div>
+          <div class="step"><div class="n">5</div><p class="t">Vysušení</p><p class="d">Koberec šetrně vysušíme.</p></div>
+          <div class="step"><div class="n">6</div><p class="t">Vysátí</p><p class="d">Finální vysátí pro čistý povrch.</p></div>
+          <div class="step"><div class="n">7</div><p class="t">Kontrola kvality</p><p class="d">Kontrola výsledku a dokončení zakázky.</p></div>
+          <div class="step"><div class="n">8</div><p class="t">Zabalení a expedice</p><p class="d">Zabalíme a připravíme k předání / převozu.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cenik" class="photoSection">
+      <div class="wrap">
+        <h2 class="sectionTitle">Ceník a kalkulačka</h2>
+        <p class="muted">
+          Zadej rozměry v centimetrech. Kalkulačka počítá automaticky. Můžeš přidat víc koberců.
+        </p>
+
+        <div class="card" style="margin-top:14px; overflow:hidden;">
+          <div style="padding:16px; border-bottom:1px solid var(--line); display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+            <div>
+              <div style="font-weight:950; letter-spacing:-.2px;">Kalkulačka (více koberců)</div>
+              <div class="mini">Čištění 300 Kč/m² • Obšívání 99 Kč/m • Impregnace 40 Kč/m²</div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn btnPrimary" id="addRugBtn" type="button">+ Přidat koberec</button>
+              <button class="btn" id="resetRugsBtn" type="button">Reset</button>
+            </div>
+          </div>
+
+          <div style="padding:16px;">
+            <div id="rugs"></div>
+
+            <div class="divider"></div>
+
+            <div class="card" style="box-shadow:none; background:rgba(255,255,255,.78); border-radius:16px;">
+              <div style="padding:16px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+                <div>
+                  <div class="mini">Součet plochy</div>
+                  <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumArea">— m²</div>
+                  <div class="mini">Součet obvodů</div>
+                  <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumPerim">— m</div>
+                </div>
+
+                <div>
+                  <div class="mini">Rozpis</div>
+                  <div class="mini" id="sumBreakdown" style="margin-top:6px; line-height:1.6;">—</div>
+
+                  <div class="divider"></div>
+
+                  <div class="mini">Celkem orientačně</div>
+                  <div style="font-size:34px; font-weight:950; letter-spacing:-.6px; margin:6px 0 10px" id="sumTotal">— Kč</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mini" style="margin-top:12px;">
+              Pozn.: cena je orientační. U některých materiálů a znečištění se může lišit.
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SBĚRNÁ MÍSTA -->
-  <section id="sberna" class="photoSection">
+  </div><!-- /topBackdrop -->
+
+  <!-- odtud dál čistě bílé -->
+  <section id="sberna" class="whiteSection">
     <div class="wrap">
       <h2 class="sectionTitle">Sběrná místa</h2>
       <p class="muted">Mapa a vyhledávání budou plně funkční po dopojení Google Maps API.</p>
@@ -566,8 +559,7 @@
     </div>
   </section>
 
-  <!-- POPTÁVKA -->
-  <section id="poptavka" class="photoSection">
+  <section id="poptavka" class="whiteSection">
     <div class="wrap">
       <h2 class="sectionTitle">Poptávkový formulář</h2>
       <p class="muted">Pošlete nám poptávku. Ozveme se zpět co nejdřív.</p>
@@ -633,8 +625,7 @@
     </div>
   </section>
 
-  <!-- KONTAKT -->
-  <section id="kontakt" class="photoSection">
+  <section id="kontakt" class="whiteSection">
     <div class="wrap">
       <h2 class="sectionTitle">Kontakt</h2>
       <p class="muted">Zavolejte nebo napište. Domluvíme předání a termín.</p>
@@ -642,26 +633,18 @@
       <div class="grid3" style="margin-top:14px;">
         <div class="card box">
           <h3>Kobercový servis, s. r. o.</h3>
-          <p>
-            <strong>IČ:</strong> 24384453<br/>
-            <strong>DIČ:</strong> CZ24384453
-          </p>
+          <p><strong>IČ:</strong> 24384453<br/><strong>DIČ:</strong> CZ24384453</p>
         </div>
 
         <div class="card box">
           <h3>Kontakt</h3>
-          <p>
-            <strong>Tel.:</strong> <a href="tel:+420776016042">+420 776 016 042</a><br/>
-            <strong>Email:</strong> <a href="mailto:info@kobercovyservis.cz">info@kobercovyservis.cz</a>
-          </p>
+          <p><strong>Tel.:</strong> <a href="tel:+420776016042">+420 776 016 042</a><br/>
+             <strong>Email:</strong> <a href="mailto:info@kobercovyservis.cz">info@kobercovyservis.cz</a></p>
         </div>
 
         <div class="card box">
           <h3>Sídlo</h3>
-          <p>
-            Bělehradská 858/23, Vinohrady<br/>
-            120 00 Praha 2
-          </p>
+          <p>Bělehradská 858/23, Vinohrady<br/>120 00 Praha 2</p>
         </div>
       </div>
 
@@ -677,7 +660,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="wrap">© <span id="y"></span> Kobercový servis, s. r. o.</div>
   </footer>
@@ -990,8 +972,8 @@
         }
       });
 
-      sumArea = round2(sumArea);
-      sumPer = round2(sumPer);
+      sumArea = Math.round(sumArea * 100) / 100;
+      sumPer  = Math.round(sumPer  * 100) / 100;
 
       sumAreaEl.textContent = rows.length ? `${sumArea} m²` : '— m²';
       sumPerimEl.textContent = rows.length ? `${sumPer} m` : '— m';
@@ -1050,7 +1032,7 @@
     resetRugsBtn?.addEventListener('click', resetRugs);
     resetRugs();
 
-    // ===== Map: místo alertů jen status =====
+    // Map zatím neaktivní
     const mapStatus = document.getElementById('mapStatus');
     function mapNotReady(){
       if(mapStatus){
