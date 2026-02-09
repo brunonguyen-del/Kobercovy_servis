@@ -32,7 +32,7 @@
     }
     a{color:inherit; text-decoration:none}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
-    section{padding:80px 0}
+    section{padding:80px 0; scroll-margin-top:120px;}
     .sectionTitle{margin:0 0 10px; font-size:30px; letter-spacing:-.3px}
     .muted{color:var(--muted); line-height:1.55}
     .mini{font-size:13px; color:var(--muted)}
@@ -51,16 +51,19 @@
       backdrop-filter: blur(10px);
       border-bottom:1px solid var(--line);
     }
+    @supports not ((backdrop-filter: blur(10px))) {
+      .nav{background:rgba(255,255,255,.92);}
+    }
     .navin{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:4px 0; /* menší než dřív */
+      padding:4px 0;
     }
     .brand{display:flex; align-items:center; gap:10px}
     .logoNav{
-      height:110px; /* menší hlavička, ale logo pořád výrazné */
+      height:110px;
       width:auto;
       display:block;
     }
@@ -74,20 +77,23 @@
       font-size:14px;
     }
     .menu a:hover{color:var(--text); border-color:var(--line); background:rgba(15,23,42,.04)}
-    .cta{
+
+    .ctaLink{
+      display:inline-flex; align-items:center; justify-content:center;
       padding:10px 12px; border-radius:12px; border:0;
       background:linear-gradient(135deg, rgba(37,99,235,.98), rgba(96,165,250,.92));
       color:white; font-weight:950; cursor:pointer;
       box-shadow:0 10px 28px rgba(37,99,235,.20);
+      font-size:14px;
     }
-    .cta:hover{filter:brightness(1.03)}
+    .ctaLink:hover{filter:brightness(1.03)}
 
     /* HERO */
     .hero{
       min-height:100vh;
       display:flex;
       align-items:center;
-      padding-top:110px; /* upraveno kvůli menší hlavičce */
+      padding-top:110px;
       position:relative;
       overflow:hidden;
       background: url("./assets/poster.jpg") center/cover no-repeat;
@@ -330,11 +336,14 @@
       background:rgba(255,255,255,.65);
     }
 
+    @media (max-width: 1100px){
+      .steps{grid-template-columns: repeat(2, 1fr);}
+    }
+
     @media (max-width: 920px){
       h1{font-size:38px}
       .heroGrid{grid-template-columns:1fr}
       .grid3{grid-template-columns:1fr}
-      .steps{grid-template-columns:1fr}
       .rugGrid{grid-template-columns:1fr}
       .rugOut{grid-template-columns:1fr}
       .mapGrid{grid-template-columns:1fr}
@@ -345,7 +354,11 @@
       .formRow{grid-template-columns:1fr}
       .logoNav{height:64px}
       .hero{padding-top:95px}
+      section{scroll-margin-top:95px;}
       .machineImg{max-width:620px; margin:0 auto;}
+    }
+    @media (max-width: 720px){
+      .steps{grid-template-columns: 1fr;}
     }
     @media (max-width: 700px){
       .logoNav{height:58px}
@@ -368,12 +381,12 @@
         <a href="#sberna">Sběrná místa</a>
         <a href="#poptavka">Poptávka</a>
         <a href="#kontakt">Kontakt</a>
-        <a href="#poptavka"><button class="cta">Poslat poptávku</button></a>
+        <a class="ctaLink" href="#poptavka">Poslat poptávku</a>
       </div>
     </div>
   </div>
 
-  <!-- HERO (bez photo pozadí navíc) -->
+  <!-- HERO -->
   <section id="uvod" class="hero">
     <div class="heroOverlay" aria-hidden="true"></div>
 
@@ -420,11 +433,10 @@
     </div>
   </section>
 
-  <!-- SLUŽBY (pozadí) -->
+  <!-- SLUŽBY -->
   <section id="sluzby" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Služby</h2>
-      <p class="muted">Tři jasné služby. Žádné marketingové pohádky — prostě to, co fakt děláme.</p>
 
       <div class="grid3" style="margin-top:14px;">
         <div class="card box">
@@ -490,7 +502,7 @@
     </div>
   </section>
 
-  <!-- CENÍK (pozadí) -->
+  <!-- CENÍK -->
   <section id="cenik" class="photoSection" style="--bgimg:url('./assets/koberec2.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Ceník a kalkulačka</h2>
@@ -544,7 +556,7 @@
     </div>
   </section>
 
-  <!-- SBĚRNÁ MÍSTA (pozadí doplněno) -->
+  <!-- SBĚRNÁ MÍSTA -->
   <section id="sberna" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Sběrná místa</h2>
@@ -586,7 +598,7 @@
     </div>
   </section>
 
-  <!-- POPTÁVKA (pozadí doplněno) -->
+  <!-- POPTÁVKA -->
   <section id="poptavka" class="photoSection" style="--bgimg:url('./assets/koberec2.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Poptávkový formulář</h2>
@@ -594,7 +606,6 @@
 
       <div class="formGrid">
         <div class="card formCard">
-          <!-- Formspree: sem dáš svůj endpoint -->
           <form id="inquiryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
             <div class="formRow">
               <div>
@@ -654,7 +665,7 @@
     </div>
   </section>
 
-  <!-- KONTAKT (pozadí doplněno) -->
+  <!-- KONTAKT -->
   <section id="kontakt" class="photoSection" style="--bgimg:url('./assets/koberec1.jpg')">
     <div class="wrap">
       <h2 class="sectionTitle">Kontakt</h2>
@@ -698,7 +709,7 @@
     </div>
   </section>
 
-  <!-- FOOTER (bez photo pozadí) -->
+  <!-- FOOTER -->
   <footer>
     <div class="wrap">© <span id="y"></span> Kobercový servis, s. r. o.</div>
   </footer>
@@ -706,7 +717,7 @@
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // ===== HERO SLIDESHOW (2s) =====
+    // ===== HERO SLIDESHOW (vyladěný) =====
     (function(){
       const imgEl = document.getElementById('heroMachine');
       if(!imgEl) return;
@@ -719,12 +730,11 @@
         './assets/klepac.png'
       ];
 
-      // preload (aby to necukalo)
       frames.forEach(src => { const i = new Image(); i.src = src; });
 
       let i = 0;
-      const stepMs = 4000;
-      const fadeMs = 800;
+      const stepMs = 3000;
+      const fadeMs = 350;
 
       setInterval(() => {
         imgEl.classList.add('isFading');
@@ -1073,14 +1083,17 @@
     resetRugsBtn?.addEventListener('click', resetRugs);
     resetRugs();
 
-    // Map zatím neaktivní
-    document.getElementById('geoBtn')?.addEventListener('click', () => alert('Mapa se připravuje (čeká na Google Maps API).'));
-    document.getElementById('searchAddrBtn')?.addEventListener('click', () => alert('Mapa se připravuje.'));
-    document.getElementById('reloadBtn')?.addEventListener('click', () => alert('Mapa se připravuje.'));
+    // ===== Map: místo alertů jen status =====
+    const mapStatus = document.getElementById('mapStatus');
+    function mapNotReady(){
+      if(mapStatus){
+        mapStatus.textContent = 'Mapa zatím není aktivní — čeká na Google Maps API klíč a napojení databáze míst.';
+      }
+    }
+    document.getElementById('geoBtn')?.addEventListener('click', mapNotReady);
+    document.getElementById('searchAddrBtn')?.addEventListener('click', mapNotReady);
+    document.getElementById('reloadBtn')?.addEventListener('click', mapNotReady);
   </script>
 
 </body>
 </html>
-
-
-
