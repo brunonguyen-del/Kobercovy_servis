@@ -27,26 +27,28 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
       background: var(--bg);
       color:var(--text);
+      position:relative;
+      overflow-x:hidden;
     }
 
-    /* Jemné pozadí jen pro horní část webu */
+    /* Jemné pozadí jen pro horní část webu (až cca půl webu) */
     body::before{
       content:"";
-      position:fixed;
+      position:absolute;
       left:0; top:0; right:0;
-      height:1200px; /* uprav klidně: 900–1600px podle oka */
+      height:1600px; /* tady prodlužuješ “kam až” to má sahat */
       background:
-        radial-gradient(900px 600px at 15% -10%, rgba(37,99,235,.08), transparent 55%),
-        radial-gradient(900px 600px at 85% 0%, rgba(96,165,250,.10), transparent 55%);
+        radial-gradient(900px 600px at 15% -10%, rgba(37,99,235,.10), transparent 55%),
+        radial-gradient(900px 600px at 85% 0%, rgba(96,165,250,.12), transparent 55%);
       pointer-events:none;
-      z-index:-1;
+      z-index:0;
     }
 
     a{color:inherit; text-decoration:none}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
 
     /* anchor offset */
-    section{padding:80px 0; scroll-margin-top:90px;}
+    section{padding:80px 0; scroll-margin-top:120px;}
 
     .sectionTitle{margin:0 0 10px; font-size:30px; letter-spacing:-.3px}
     .muted{color:var(--muted); line-height:1.55}
@@ -59,7 +61,7 @@
       box-shadow:var(--shadow);
     }
 
-    /* NAV – Varianta A: nízká lišta, logo vyčnívá */
+    /* NAV – PŮVODNÍ NASTAVENÍ */
     .nav{
       position:fixed; inset:0 0 auto 0; z-index:50;
       background:rgba(255,255,255,.72);
@@ -69,39 +71,22 @@
     @supports not ((backdrop-filter: blur(10px))) {
       .nav{background:rgba(255,255,255,.92);}
     }
-
     .navin{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:2px 0;
-      min-height:64px;
+      padding:4px 0; /* původní */
     }
-
-    .brand{
-      position:relative;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
+    .brand{display:flex; align-items:center; gap:10px}
     .logoNav{
-      height:110px; /* logo velké */
+      height:110px; /* původní */
       width:auto;
       display:block;
-      position:relative;
-      top:18px;     /* vyčnívá dolů */
+      position:static; /* žádný vyčnívání */
     }
 
-    .menu{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      align-items:center
-    }
-
+    .menu{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
     .menu a{
       color:var(--muted);
       padding:8px 10px;
@@ -126,16 +111,18 @@
       min-height:100vh;
       display:flex;
       align-items:center;
-      padding-top:90px; /* sladěné s scroll-margin-top */
+      padding-top:110px; /* původní */
       position:relative;
       overflow:hidden;
       background: url("./assets/poster.jpg") center/cover no-repeat;
+      z-index:1; /* nad body::before */
     }
     .heroOverlay{
       position:absolute; inset:0;
+      /* DŮLEŽITÉ: už to není “bílá stěna”, jen lehká mlha */
       background:
         radial-gradient(900px 600px at 15% 20%, rgba(37,99,235,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.87) 55%, rgba(255,255,255,.98));
+        linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.60) 55%, rgba(255,255,255,.70));
     }
     .heroContent{position:relative; z-index:2}
     .heroGrid{
@@ -196,11 +183,8 @@
     }
     .machineImg.isFading{opacity:0}
 
-    /* Vypnutí fotopozadí sekcí (zbytek webu je bílý) */
-    .photoSection{position:relative;}
-    .photoSection::before,
-    .photoSection::after{content:none;}
-    .photoSection{background:transparent;}
+    /* Sekce čistě bílé (žádné fotky na pozadí) */
+    .photoSection{position:relative; z-index:1;} /* nad body::before */
 
     /* GRID */
     .grid3{display:grid; grid-template-columns: repeat(3,1fr); gap:14px}
@@ -353,6 +337,8 @@
       color:var(--muted);
       border-top:1px solid var(--line);
       background:rgba(255,255,255,.65);
+      position:relative;
+      z-index:1;
     }
 
     @media (max-width: 1100px){
@@ -363,6 +349,7 @@
       h1{font-size:38px}
       .heroGrid{grid-template-columns:1fr}
       .grid3{grid-template-columns:1fr}
+      .steps{grid-template-columns:1fr}
       .rugGrid{grid-template-columns:1fr}
       .rugOut{grid-template-columns:1fr}
       .mapGrid{grid-template-columns:1fr}
@@ -371,16 +358,11 @@
       .row{grid-template-columns:1fr}
       .formGrid{grid-template-columns:1fr}
       .formRow{grid-template-columns:1fr}
-
-      /* Na mobilu logo nevyčnívá (jinak překáží) */
-      .logoNav{height:64px; top:0;}
-      .hero{padding-top:90px;}
-      section{scroll-margin-top:90px;}
+      .logoNav{height:64px}
+      .hero{padding-top:95px}
+      section{scroll-margin-top:95px;}
       .machineImg{max-width:620px; margin:0 auto;}
-    }
-
-    @media (max-width: 720px){
-      .steps{grid-template-columns: 1fr;}
+      body::before{height:1400px;}
     }
   </style>
 </head>
@@ -476,46 +458,14 @@
       <h3 style="margin:0; font-size:16px; letter-spacing:-.1px;">Jak probíhá čištění</h3>
 
       <div class="steps">
-        <div class="step">
-          <div class="n">1</div>
-          <p class="t">Zaměření a evidence</p>
-          <p class="d">Změříme, zaevidujeme a přiřadíme zakázku.</p>
-        </div>
-        <div class="step">
-          <div class="n">2</div>
-          <p class="t">Vyklepání</p>
-          <p class="d">Odstranění volného prachu a hrubých nečistot.</p>
-        </div>
-        <div class="step">
-          <div class="n">3</div>
-          <p class="t">Odstranění silného znečištění</p>
-          <p class="d">Zaměříme se na výrazně znečištěná místa.</p>
-        </div>
-        <div class="step">
-          <div class="n">4</div>
-          <p class="t">Čištění v automatické lince</p>
-          <p class="d">Hlavní čištění proběhne na automatizované lince.</p>
-        </div>
-        <div class="step">
-          <div class="n">5</div>
-          <p class="t">Vysušení</p>
-          <p class="d">Koberec šetrně vysušíme.</p>
-        </div>
-        <div class="step">
-          <div class="n">6</div>
-          <p class="t">Vysátí</p>
-          <p class="d">Finální vysátí pro čistý povrch.</p>
-        </div>
-        <div class="step">
-          <div class="n">7</div>
-          <p class="t">Kontrola kvality</p>
-          <p class="d">Kontrola výsledku a dokončení zakázky.</p>
-        </div>
-        <div class="step">
-          <div class="n">8</div>
-          <p class="t">Zabalení a expedice</p>
-          <p class="d">Zabalíme a připravíme k předání / převozu.</p>
-        </div>
+        <div class="step"><div class="n">1</div><p class="t">Zaměření a evidence</p><p class="d">Změříme, zaevidujeme a přiřadíme zakázku.</p></div>
+        <div class="step"><div class="n">2</div><p class="t">Vyklepání</p><p class="d">Odstranění volného prachu a hrubých nečistot.</p></div>
+        <div class="step"><div class="n">3</div><p class="t">Odstranění silného znečištění</p><p class="d">Zaměříme se na výrazně znečištěná místa.</p></div>
+        <div class="step"><div class="n">4</div><p class="t">Čištění v automatické lince</p><p class="d">Hlavní čištění proběhne na automatizované lince.</p></div>
+        <div class="step"><div class="n">5</div><p class="t">Vysušení</p><p class="d">Koberec šetrně vysušíme.</p></div>
+        <div class="step"><div class="n">6</div><p class="t">Vysátí</p><p class="d">Finální vysátí pro čistý povrch.</p></div>
+        <div class="step"><div class="n">7</div><p class="t">Kontrola kvality</p><p class="d">Kontrola výsledku a dokončení zakázky.</p></div>
+        <div class="step"><div class="n">8</div><p class="t">Zabalení a expedice</p><p class="d">Zabalíme a připravíme k předání / převozu.</p></div>
       </div>
     </div>
   </section>
