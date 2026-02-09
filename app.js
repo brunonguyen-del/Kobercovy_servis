@@ -460,4 +460,121 @@
 
   // ====== PLACES: load from Google Sheets CSV and render list ======
   const placesListEl = document.getElementById('placesList');
-  const mapStatusEl
+  const mapStatusEl = document.getElementById('mapStatus');
+
+  function renderPlaces(places){
+    if(!placesListEl) return;
+
+    if(!places.length){
+      placesListEl.innerHTML = `
+        <div class="card" style="padding:12px; box-shadow:none; background:rgba(255,255,255,.92);">
+          <div style="font-weight:950;">Žádná sběrná místa</div>
+          <div class="mini">Zkontroluj data v Google Sheets (řádky) a sdílení.</div>
+        </div>
+      `;
+      return;
+    }
+
+    placesListEl.innerHTML = places.map(p => {
+      const name = escapeHtml(p.name || "Sběrné místo");
+      const address = escapeHtml(p.address || "");
+      const hours = escapeHtml(p.hours || "");
+      const phone = cleanStr(p.phone);
+      const email = cleanStr(p.email);
+      const web = cleanStr(p.web);
+
+      const phoneLink = phone ? `<div class="mini"><strong>Tel:</strong> <a href="tel:${escapeHtml(phone)}">${escapeHtml(phone)}</a></div>` : "";
+      const emailLink = email ? `<div class="mini"><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></div>` : "";
+      const webLink = web ? `<div class="mini"><strong>Web:</strong> <a href="${escapeHtml(web)}" target="_blank" rel="noopener noreferrer">${escapeHtml(web)}</a></div>` : "";
+      const hoursLine = hours ? `<div class="mini"><strong>Otevírací doba:</strong> ${hours}</div>` : "";
+
+      return `
+        <div class="card" style="padding:12px; box-shadow:none; background:rgba(255,255,255,.92);">
+          <div style="font-weight:950; letter-spacing:-.2px;">${name}</div>
+          ${address ? `<div class="mini" style="margin-top:4px;">${address}</div>` : ""}
+          <div style="height:10px"></div>
+          ${hoursLine}
+          ${phoneLink}
+          ${emailLink}
+          ${webLink}
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function loadPlaces(){
+    const url = cleanStr(CFG.PLACES_DATA_URL);
+
+    if(!placesListEl && !mapStatusEl) return;
+
+    if(!url){
+      if(mapStatusEl) mapStatusEl.textContent = 'Chybí PLACES_DATA_URL v config.js.';
+      renderPlaces([]);
+      return;
+    }
+
+    if(mapStatusEl) mapStatusEl.textContent = 'Načítám sběrná místa…';
+
+    try{
+      // cache-bust aby reload opravdu reloadnul
+      const bust = (url.includes("?") ? "&" : "?") + "v=" + Date.now();
+      const res = await fetch(url + bust, { method:'GET' });
+
+      if(!res.ok){
+        if(mapStatusEl) mapStatusEl.textContent = `Nepodařilo se stáhnout data (${res.status}). Zkontroluj sdílení tabulky.`;
+        renderPlaces([]);
+        return;
+      }
+
+      const text = await res.text();
+
+      // když to není CSV, často to bude HTML login stránka
+      if(text.toLowerCase().includes("<html") || text.toLowerCase().includes("accounts.google.com")){
+        if(mapStatusEl) mapStatusEl.textContent = 'Google vrátil HTML (login). Dej tabulku na „Kdokoli s odkazem – Prohlížeč“.';
+        renderPlaces([]);
+        return;
+      }
+
+      const raw = csvToObjects(text);
+
+      // map + validace
+      const places = raw.map(r => {
+        const lat = toNum(r.lat);
+        const lng = toNum(r.lng);
+        return {
+          name: cleanStr(r.name),
+          address: cleanStr(r.address),
+          hours: cleanStr(r.hours),
+          phone: cleanStr(r.phone),
+          email: cleanStr(r.email),
+          web: cleanStr(r.web),
+          lat, lng
+        };
+      }).filter(p => p.name || p.address);
+
+      renderPlaces(places);
+
+      if(mapStatusEl){
+        mapStatusEl.textContent = `Načteno: ${places.length} míst. (Mapa zatím není napojená.)`;
+      }
+    }catch(err){
+      if(mapStatusEl) mapStatusEl.textContent = 'Chyba při načítání dat. (Síť / CORS / sdílení tabulky)';
+      renderPlaces([]);
+    }
+  }
+
+  // Tlačítko “Znovu načíst místa”
+  document.getElementById('reloadBtn')?.addEventListener('click', loadPlaces);
+
+  // Auto-load při startu
+  loadPlaces();
+
+  // Map placeholder
+  document.getElementById('geoBtn')?.addEventListener('click', () => {
+    alert('Poloha a mapa budou doplněny později. Teď jen ověřujeme, že data ze Sheets tečou do seznamu.');
+  });
+  document.getElementById('searchAddrBtn')?.addEventListener('click', () => {
+    alert('Vyhledávání podle adresy doplníme až s Google Maps API. Teď jen seznam z Google Sheets.');
+  });
+
+})();
